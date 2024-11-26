@@ -1,6 +1,6 @@
 {
   "name": "@tonder.io/rn-sdk",
-  "version": "0.1.0",
+  "version": "0.1.0-beta.DEV1355.7",
   "description": "Tonder react native sdk",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -81,6 +81,8 @@
     "react": "18.3.1",
     "react-native": "0.76.3",
     "react-native-builder-bob": "^0.33.1",
+    "react-native-svg": "^15.9.0",
+    "react-native-webview": "^13.12.4",
     "release-it": "^17.10.0",
     "turbo": "^1.10.7",
     "typescript": "^5.2.2"
@@ -90,7 +92,9 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-svg": "*",
+    "react-native-webview": "*"
   },
   "workspaces": [
     "example"
@@ -185,5 +189,10 @@
     "type": "module-legacy",
     "languages": "kotlin-swift",
     "version": "0.44.2"
+  },
+  "dependencies": {
+    "lucide-react-native": "^0.461.0",
+    "openpay-react-native": "^2.0.10",
+    "skyflow-react-native": "https://github.com/davidhernandez-adm/srn-adl"
   }
 }

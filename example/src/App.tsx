@@ -33,7 +33,7 @@ declare global {
 }
 
 const apiPublicKey = '11e3d3c3e95e0eaabbcae61ebad34ee5f93c3d27';
-const mode = 'development';
+const mode = 'stage';
 function FullPayScreen() {
   return (
     <TonderProvider

@@ -42,7 +42,7 @@ export default function HomeScreen() {
         <>
           <View style={styles.buttonContainer}>
             <Button
-              title="Prebuilt UI (multi-step)"
+              title="Lite payment with secure inputs"
               onPress={() => {
                 navigation.navigate('LitePaymentScreen');
               }}
@@ -50,7 +50,7 @@ export default function HomeScreen() {
           </View>
           <View style={styles.buttonContainer}>
             <Button
-              title="Card element only"
+              title="Lite payment with customization"
               onPress={() => {
                 navigation.navigate('LitePaymentCustomizationScreen');
               }}
@@ -58,7 +58,7 @@ export default function HomeScreen() {
           </View>
           <View style={styles.buttonContainer}>
             <Button
-              title="Multiline Card element only"
+              title="Lite payment with all sdk methods"
               onPress={() => {
                 navigation.navigate('LitePaymentFullScreen');
               }}
@@ -70,7 +70,7 @@ export default function HomeScreen() {
         <>
           <View style={styles.buttonContainer}>
             <Button
-              title="Prebuilt UI for Subscription"
+              title="Prebuilt UI for Enrollment"
               onPress={() => {
                 navigation.navigate('FullEnrollmentScreen');
               }}
@@ -78,7 +78,7 @@ export default function HomeScreen() {
           </View>
           <View style={styles.buttonContainer}>
             <Button
-              title="Customer Sheet"
+              title="Enrrollment with button"
               onPress={() => {
                 navigation.navigate('FullEnrollmentButtonScreen');
               }}
@@ -86,7 +86,7 @@ export default function HomeScreen() {
           </View>
           <View style={styles.buttonContainer}>
             <Button
-              title="Prebuilt UI (multi-step) (deferred intent)"
+              title="Enrollment with customization"
               onPress={() => {
                 navigation.navigate('FullEnrollmentCustomizationScreen');
               }}

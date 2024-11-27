@@ -14,10 +14,11 @@ import {
 } from '@tonder.io/rn-sdk';
 import { useEffect } from 'react';
 import { getSecureToken } from './utils/utils';
+import { BusinessConfig } from './business';
 
 export default function FullEnrollmentCustomizationScreen() {
   // Do not share your API secret key.
-  const apiSecretKey = 'f3d0e682d37d6171b1bcec3597ae75709a4bb88b';
+  const apiSecretKey = BusinessConfig.apiSecretKey;
   const customerData: ICustomer = {
     email: 'test@example.com',
     firstName: 'david',
@@ -80,12 +81,11 @@ export default function FullEnrollmentCustomizationScreen() {
 
   const callbackFinish = async (response) => {
     console.log('FINISH SAVE CARD ===== ', response);
-    if(response.error){
+    if (response.error) {
       // Manage error
       Alert.alert('Error', 'Failed to save card. Please try again.');
-
     }
-    
+
     Alert.alert('Success', 'Card saved successfully!');
     // Reset the state and regenerate the SDK to use it again.
     reset();

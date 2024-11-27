@@ -21,9 +21,10 @@ import {
 } from '@tonder.io/rn-sdk';
 import React, { useEffect, useState } from 'react';
 import { getSecureToken } from './utils/utils';
+import { BusinessConfig } from './business';
 
 export default function LitePaymentScreen() {
-  const apiSecretKey = '197967d431010dc1a129e3f726cb5fd27987da92';
+  const apiSecretKey = BusinessConfig.apiSecretKey;
   const paymentData: IProcessPaymentRequest = {
     customer: {
       email: 'test@example.com',
@@ -95,7 +96,7 @@ export default function LitePaymentScreen() {
       console.error('Error payment: ', error, response?.transaction_status);
       return;
     }
-    console.log("Success Payment", response)
+    console.log('Success Payment', response);
     Alert.alert('Success', 'Payment process successfully!');
 
     // Reset the state and regenerate the SDK to use it again.

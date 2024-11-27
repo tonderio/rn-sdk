@@ -12,6 +12,7 @@ import FullEnrollmentButtonScreen from './FullEnrollmentButtonScreen';
 import FullPaymentButtonScreen from './FullPaymentButtonScreen';
 import LitePaymentCustomizationScreen from './LitePaymentCustomizationScreen';
 import LitePaymentFullScreen from './LitePaymentFullScreen';
+import { BusinessConfig } from './business';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -32,8 +33,8 @@ declare global {
   }
 }
 
-const apiPublicKey = '11e3d3c3e95e0eaabbcae61ebad34ee5f93c3d27';
-const mode = 'stage';
+const apiPublicKey = BusinessConfig.apiKey;
+const mode = BusinessConfig.mode;
 function FullPayScreen() {
   return (
     <TonderProvider

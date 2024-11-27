@@ -14,10 +14,11 @@ import {
 } from '@tonder.io/rn-sdk';
 import { useEffect } from 'react';
 import { getSecureToken } from './utils/utils';
+import { BusinessConfig } from './business';
 
 export default function FullEnrollmentScreen() {
   // Do not share your API secret key.
-  const apiSecretKey = 'f3d0e682d37d6171b1bcec3597ae75709a4bb88b';
+  const apiSecretKey = BusinessConfig.apiSecretKey;
   const customerData: ICustomer = {
     email: 'test@example.com',
     firstName: 'david',
@@ -66,7 +67,7 @@ export default function FullEnrollmentScreen() {
     if (response.error) {
       // Manage the error
       Alert.alert('Error', 'Failed to save card. Please try again.');
-      console.log('Save Card ERROR', response.error)
+      console.log('Save Card ERROR', response.error);
       return;
     }
     Alert.alert('Success', 'Card saved successfully!');

@@ -14,10 +14,11 @@ import {
 } from '@tonder.io/rn-sdk';
 import { useEffect } from 'react';
 import { getSecureToken } from './utils/utils';
+import { BusinessConfig } from './business';
 
 export default function FullPaymentScreen() {
   // Do not share your API secret key.
-  const apiSecretKey = '197967d431010dc1a129e3f726cb5fd27987da92';
+  const apiSecretKey = BusinessConfig.apiSecretKey;
   const paymentData: IBaseProcessPaymentRequest = {
     customer: {
       email: 'test@example.com',
@@ -77,13 +78,13 @@ export default function FullPaymentScreen() {
   };
 
   const callbackFinish = async (response) => {
-    if(response.error || response.response?.transaction_status !== 'Success'){
+    if (response.error || response.response?.transaction_status !== 'Success') {
       // Manage error
       Alert.alert('Error', 'Failed to process payment. Please try again.');
-      console.log('Error payment: ', response)
+      console.log('Error payment: ', response);
       return;
     }
-    console.log('Success payment', response)
+    console.log('Success payment', response);
     Alert.alert('Success', 'Payment process successfully!');
     // Reset the state and regenerate the SDK to use it again.
     reset();

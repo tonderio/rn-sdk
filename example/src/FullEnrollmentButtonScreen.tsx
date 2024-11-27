@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  Alert
+  Alert,
 } from 'react-native';
 import {
   ICustomer,
@@ -15,10 +15,11 @@ import {
 } from '@tonder.io/rn-sdk';
 import { useEffect, useState } from 'react';
 import { getSecureToken } from './utils/utils';
+import { BusinessConfig } from './business';
 
 export default function FullEnrollmentButtonScreen() {
   // Do not share your API secret key.
-  const apiSecretKey = 'f3d0e682d37d6171b1bcec3597ae75709a4bb88b';
+  const apiSecretKey = BusinessConfig.apiSecretKey;
   const customerData: ICustomer = {
     email: 'test@example.com',
     firstName: 'david',

@@ -16,10 +16,11 @@ import {
 } from '@tonder.io/rn-sdk';
 import React, { useEffect, useState } from 'react';
 import { getSecureToken } from './utils/utils';
+import { BusinessConfig } from './business';
 
 export default function FullPaymentButtonScreen() {
   // Do not share your API secret key.
-  const apiSecretKey = '197967d431010dc1a129e3f726cb5fd27987da92';
+  const apiSecretKey = BusinessConfig.apiSecretKey;
   const paymentData: IBaseProcessPaymentRequest = {
     customer: {
       email: 'test@example.com',

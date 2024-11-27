@@ -24,9 +24,10 @@ import {
   useTonder,
 } from '@tonder.io/rn-sdk';
 import { getSecureToken } from './utils/utils';
+import { BusinessConfig } from './business';
 
 export default function LitePaymentFullScreen() {
-  const apiSecretKey = '197967d431010dc1a129e3f726cb5fd27987da92';
+  const apiSecretKey = BusinessConfig.apiSecretKey;
   const paymentData: IProcessPaymentRequest = {
     customer: {
       email: 'test@example.com',
@@ -118,7 +119,11 @@ export default function LitePaymentFullScreen() {
       const { response, error } = await payment();
       if (error || response?.transaction_status !== 'Success') {
         Alert.alert('Error', 'Failed to process payment. Please try again.');
-        console.error('Error processing payment: ', error, response?.transaction_status);
+        console.error(
+          'Error processing payment: ',
+          error,
+          response?.transaction_status
+        );
         return;
       }
       Alert.alert('Success', 'Payment process successfully!');

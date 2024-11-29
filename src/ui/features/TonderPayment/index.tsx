@@ -19,14 +19,7 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
   const [deletingCards, setDelitingCards] = useState<string[]>([]);
 
   const handleMethodSelect = (methodId: string, type: string) => {
-    const value =
-      type === 'card'
-        ? methodId
-        : type === 'payment_method'
-          ? state.uiData?.paymentMethods.find((it) => it.id === methodId)
-              ?.payment_method || ''
-          : '';
-    uiWrapper.updateMethod(type, value);
+    uiWrapper.updateMethod(type, methodId);
   };
 
   const handleSaveCardChange = (value: boolean) => {

@@ -64,11 +64,14 @@ export class ThreeDSHandler implements IThreeDSHandler {
       //   return await this.handleRedirect();
       // }
       const url = this.getRedirectUrl();
-      if(!url){
-        const url_verify = this.payload.actions.find((it) => it.name === 'verify_transaction_status')
+
+      if (!url) {
+        const url_verify = this.payload.actions.find(
+          (it) => it.name === 'verify_transaction_status'
+        );
         await this.saveVerifyTransactionUrl(get(url_verify, 'url'));
-      }else{
-        this.saveVerifyTransactionUrl()
+      } else {
+        this.saveVerifyTransactionUrl();
       }
       const trx_response = await this.verifyTransaction();
       if (!url) {
@@ -133,7 +136,8 @@ export class ThreeDSHandler implements IThreeDSHandler {
   }
   private async saveVerifyTransactionUrl(urlData?: string): Promise<void> {
     const url =
-    urlData || this.payload?.next_action?.redirect_to_url
+      urlData ||
+      this.payload?.next_action?.redirect_to_url
         ?.verify_transaction_status_url ||
       this.payload?.next_action?.iframe_resources
         ?.verify_transaction_status_url;

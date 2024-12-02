@@ -73,6 +73,16 @@ export class ThreeDSHandler implements IThreeDSHandler {
       } else {
         this.saveVerifyTransactionUrl();
       }
+
+      if (
+        this.payload?.provider === 'nuvei' &&
+        ['Success', 'Authorized'].includes(this.payload?.transaction_status)
+      ) {
+        this.emit3DS('hide3DS', {});
+        await this.removeVerifyTransactionUrl();
+        await this.onFinish(this.payload);
+      }
+
       const trx_response = await this.verifyTransaction();
       if (!url) {
         this.emit3DS('hide3DS', {});
@@ -89,8 +99,10 @@ export class ThreeDSHandler implements IThreeDSHandler {
           const transaction_status = response?.transaction_status || '';
           if (
             response?.decline?.error_type === 'Hard' ||
-            response?.checkout.is_route_finished ||
-            ['Success', 'Authorized'].includes(transaction_status)
+            response?.checkout?.is_route_finished ||
+            ['Success', 'Authorized'].includes(transaction_status) ||
+            (['Pending'].includes(transaction_status) &&
+              !!response?.payment_method?.is_apm)
           ) {
             this.emit3DS('hide3DS', {});
             await this.removeVerifyTransactionUrl();
@@ -98,7 +110,7 @@ export class ThreeDSHandler implements IThreeDSHandler {
           } else {
             try {
               const retry_checkout = await this.resumeCheckout(
-                response?.checkout.id!
+                response?.checkout?.id!
               );
               this.setPayload(retry_checkout);
 

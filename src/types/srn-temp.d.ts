@@ -67,6 +67,7 @@ declare module 'skyflow-react-native' {
   export interface CollectInputStylesVariant
     extends StylesBaseVariant,
       StylesFocusVariant {
+    base?: Record<string, any>;
     complete?: Record<string, any>;
     invalid?: Record<string, any>;
     empty?: Record<string, any>;
@@ -76,6 +77,7 @@ declare module 'skyflow-react-native' {
   export interface CollectLabelStylesVariant
     extends StylesBaseVariant,
       StylesFocusVariant {
+    base?: Record<string, any>;
     requiredAsterisk?: Record<string, any>;
   }
 }

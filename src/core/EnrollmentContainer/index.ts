@@ -34,7 +34,8 @@ export class EnrollmentContainer implements IEnrollment {
   ): Promise<{ error?: TonderError }> => {
     return await this.#baseSDK.create(data);
   };
-  public async saveCustomerCard(): Promise<IBaseResponse<ISaveCardResponse>> {
+
+  public saveCustomerCard = async(): Promise<IBaseResponse<ISaveCardResponse>> => {
     const currentCallbacks = this.#baseSDK.getState().callbacks;
     try {
       await this.#baseSDK.setState({

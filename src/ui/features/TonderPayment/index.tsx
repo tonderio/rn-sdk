@@ -129,6 +129,17 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
               placeholders={state?.customization?.placeholders}
             />
           )}
+        {state?.customization?.paymentMethods?.show && (
+          <PaymentMethodsList
+            methods={state?.uiData.paymentMethods}
+            selectedMethod={state?.uiData?.payment_method || ''}
+            onMethodSelect={(methodId) => {
+              handleMethodSelect(methodId, 'payment_method');
+            }}
+            style={state?.customization?.styles?.paymentMethods}
+          />
+        )}
+
         {state?.customization?.showMessages &&
           state?.message &&
           state?.message !== '' &&
@@ -174,16 +185,6 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
               </Text>
             </View>
           )}
-        {state?.customization?.paymentMethods?.show && (
-          <PaymentMethodsList
-            methods={state?.uiData.paymentMethods}
-            selectedMethod={state?.uiData?.payment_method || ''}
-            onMethodSelect={(methodId) => {
-              handleMethodSelect(methodId, 'payment_method');
-            }}
-            style={state?.customization?.styles?.paymentMethods}
-          />
-        )}
 
         {state?.customization?.paymentButton?.show && (
           <ProcessButton
@@ -222,6 +223,7 @@ const styles = StyleSheet.create({
   },
   messageContainer: {
     paddingHorizontal: 20,
+    marginVertical: 5,
   },
   errorText: {
     color: 'red',

@@ -24,6 +24,12 @@ export default function FullPaymentCustomizationScreen() {
       email: 'test@example.com',
       firstName: 'david',
       lastName: 'her',
+      country: 'Mexico',
+      address: 'Pinos 507, Col El Tecuan',
+      city: 'Durango',
+      state: 'Durango',
+      postCode: '34105',
+      phone: '8161234567',
     },
     cart: {
       total: 399,
@@ -195,14 +201,22 @@ export default function FullPaymentCustomizationScreen() {
   };
 
   const callbackFinish = async (response) => {
-    if (response.error || response.response?.transaction_status !== 'Success') {
+    if (
+      response.error ||
+      !['Success', 'Authorized'].includes(
+        response?.response?.transaction_status
+      )
+    ) {
       // Manage error
       Alert.alert('Error', 'Failed to process payment. Please try again.');
       console.log('Error payment: ', response);
       return;
     }
     console.log('Success payment', response);
-    Alert.alert('Success', 'Payment process successfully!');
+    Alert.alert(
+      response?.response?.transaction_status || 'Success',
+      'Payment process successfully!'
+    );
     // Reset the state and regenerate the SDK to use it again.
     reset();
     await initialize();

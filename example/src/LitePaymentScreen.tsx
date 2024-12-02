@@ -19,7 +19,7 @@ import {
   SDKType,
   useTonder,
 } from '@tonder.io/rn-sdk';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getSecureToken } from './utils/utils';
 import { BusinessConfig } from './business';
 
@@ -30,6 +30,12 @@ export default function LitePaymentScreen() {
       email: 'test@example.com',
       firstName: 'david',
       lastName: 'her',
+      country: 'Mexico',
+      address: 'Pinos 507, Col El Tecuan',
+      city: 'Durango',
+      state: 'Durango',
+      postCode: '34105',
+      phone: '8161234567',
     },
     cart: {
       total: 399,
@@ -90,14 +96,20 @@ export default function LitePaymentScreen() {
     const { response, error } = await payment();
     setIsProcessing(false);
 
-    if (error || response?.transaction_status !== 'Success') {
+    if (
+      error ||
+      !['Success', 'Authorized'].includes(response?.transaction_status)
+    ) {
       // Manage Error
       Alert.alert('Error', 'Failed to process payment. Please try again.');
       console.error('Error payment: ', error, response?.transaction_status);
       return;
     }
     console.log('Success Payment', response);
-    Alert.alert('Success', 'Payment process successfully!');
+    Alert.alert(
+      response?.transaction_status || 'Success',
+      'Payment process successfully!'
+    );
 
     // Reset the state and regenerate the SDK to use it again.
     reset();

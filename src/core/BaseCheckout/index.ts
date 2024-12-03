@@ -301,7 +301,7 @@ class BaseCheckout extends BaseSDK {
               return;
             }
 
-            await executeCallback({
+            executeCallback({
               callbacks: this.getState().callbacks,
               callback: 'onFinishPayment',
               data: { response: finalResponse },

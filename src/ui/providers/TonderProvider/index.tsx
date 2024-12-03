@@ -62,7 +62,7 @@ const TonderProvider: React.FC<React.PropsWithChildren<ITonderProvider>> = <
   }, [tonder]);
 
   useEffect(() => {
-    if (!tonder) return;
+    if (!tonder || !state?.isCreated) return;
 
     const unsubscribeShow = tonder.on(
       'show3DS',
@@ -71,14 +71,15 @@ const TonderProvider: React.FC<React.PropsWithChildren<ITonderProvider>> = <
       }
     );
     const unsubscribeHide = tonder.on('hide3DS', ({}) => {
-      setThreeDSConfig({ url: '' });
+      setThreeDSConfig({ url: undefined });
     });
 
     return () => {
+      console.log('unsubs');
       unsubscribeShow();
       unsubscribeHide();
     };
-  }, [tonder]);
+  }, [tonder, state?.isCreated]);
 
   const contextValue = useMemo(
     () => ({
@@ -89,17 +90,20 @@ const TonderProvider: React.FC<React.PropsWithChildren<ITonderProvider>> = <
     [sdk, state, uiSDKWrapper]
   );
 
+  console.log('threeDSConfig.url: ', threeDSConfig.url);
   return (
     <tonderContext.Provider value={contextValue}>
       <SkyflowProvider config={skyflowConfig}>
         <SkyflowContainerWrapper contextValue={contextValue}>
-          <ThreeDSWebView
-            url={threeDSConfig.url}
-            onComplete={() => {
-              threeDSConfig.onComplete?.();
-            }}
-            returnURL={threeDSConfig.returnURL!}
-          />
+          {!!threeDSConfig.url && (
+            <ThreeDSWebView
+              url={threeDSConfig.url}
+              onComplete={() => {
+                threeDSConfig.onComplete?.();
+              }}
+              returnURL={threeDSConfig.returnURL!}
+            />
+          )}
           {children}
         </SkyflowContainerWrapper>
       </SkyflowProvider>

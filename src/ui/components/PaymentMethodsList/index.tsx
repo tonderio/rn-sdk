@@ -32,9 +32,9 @@ const PaymentMethodsList: React.FC<PaymentMethodsListProps> = ({
                 selected: style?.radioSelected,
                 inner: style?.radioInner,
               }}
-              value={method.id}
-              selected={selectedMethod === method.id}
-              onSelect={() => onMethodSelect(method.id)}
+              value={method.payment_method}
+              selected={selectedMethod === method.payment_method}
+              onSelect={() => onMethodSelect(method.payment_method)}
             />
             <View style={styles.methodIconContainer}>
               <View style={styles.methodIconBorder} />

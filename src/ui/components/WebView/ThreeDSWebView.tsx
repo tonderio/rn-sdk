@@ -1,10 +1,12 @@
 // @ts-nocheck
+import { X } from 'lucide-react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Modal,
   SafeAreaView,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import WebView from 'react-native-webview';
@@ -33,12 +35,25 @@ export const ThreeDSWebView: React.FC<ThreeDSWebViewProps> = ({
     </View>
   );
   return (
-    <Modal visible={!!url} animationType="slide" onRequestClose={onComplete}>
+    <Modal
+      visible={!!url}
+      animationType="slide"
+      onRequestClose={() => {
+        setIsLoading(true);
+        onComplete();
+      }}
+    >
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
-          {/*<TouchableOpacity style={styles.closeButton} onPress={onComplete}>*/}
-          {/*  <X size={22} color="#000" />*/}
-          {/*</TouchableOpacity>*/}
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => {
+              setIsLoading(true);
+              onComplete();
+            }}
+          >
+            <X size={22} color="#000" />
+          </TouchableOpacity>
           <WebView
             source={{ uri: url }}
             style={styles.webview}
@@ -99,7 +114,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255,1)',
+    backgroundColor: 'rgba(255, 255, 255, 1)',
   },
   closeButton: {
     position: 'absolute',

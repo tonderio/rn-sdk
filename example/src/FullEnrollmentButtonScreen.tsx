@@ -94,7 +94,8 @@ export default function FullEnrollmentButtonScreen() {
           disabled={isProcessing}
           onPress={handleSaveCard}
         >
-          <Text>Guardar</Text>
+          {!isProcessing && <Text>Guardar</Text>}
+          {isProcessing && <Text>Guardando...</Text>}
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

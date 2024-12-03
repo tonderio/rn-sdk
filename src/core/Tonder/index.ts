@@ -81,9 +81,9 @@ class Tonder {
       ...(selectedMethod && selectedMethod !== ''
         ? {
             ...(card && card !== ''
-              ? { card }
+              ? { card, payment_method: '' }
               : paymentMethod && paymentMethod !== ''
-                ? { payment_method: paymentMethod }
+                ? { payment_method: paymentMethod, card: '' }
                 : { card: '', payment_method: '' }),
           }
         : {}),
@@ -110,9 +110,13 @@ class Tonder {
   }
 
   public emit = (eventName: string, data: any): void => {
-    const listeners = this.eventListeners.get(eventName);
-    if (listeners) {
-      listeners.forEach((listener) => listener(data));
+    try {
+      const listeners = this.eventListeners.get(eventName);
+      if (listeners) {
+        listeners.forEach((listener) => listener(data));
+      }
+    } catch (e) {
+      console.error('[Tonder | emit | ERROR]', e);
     }
   };
 

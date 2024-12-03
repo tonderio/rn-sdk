@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -33,6 +33,12 @@ export default function LitePaymentFullScreen() {
       email: 'test@example.com',
       firstName: 'David',
       lastName: 'Her',
+      country: 'Mexico',
+      address: 'Pinos 507, Col El Tecuan',
+      city: 'Durango',
+      state: 'Durango',
+      postCode: '34105',
+      phone: '8161234567',
     },
     cart: {
       total: 399,
@@ -117,7 +123,10 @@ export default function LitePaymentFullScreen() {
     setIsProcessing(true);
     try {
       const { response, error } = await payment();
-      if (error || response?.transaction_status !== 'Success') {
+      if (
+        error ||
+        !['Success', 'Authorized'].includes(response?.transaction_status)
+      ) {
         Alert.alert('Error', 'Failed to process payment. Please try again.');
         console.error(
           'Error processing payment: ',
@@ -126,7 +135,10 @@ export default function LitePaymentFullScreen() {
         );
         return;
       }
-      Alert.alert('Success', 'Payment process successfully!');
+      Alert.alert(
+        response?.transaction_status || 'Success',
+        'Payment process successfully!'
+      );
       console.log('Success Payment: ', response);
       // Reset the state and regenerate the SDK to use it again.
       reset();

@@ -19,14 +19,7 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
   const [deletingCards, setDelitingCards] = useState<string[]>([]);
 
   const handleMethodSelect = (methodId: string, type: string) => {
-    const value =
-      type === 'card'
-        ? methodId
-        : type === 'payment_method'
-          ? state.uiData?.paymentMethods.find((it) => it.id === methodId)
-              ?.payment_method || ''
-          : '';
-    uiWrapper.updateMethod(type, value);
+    uiWrapper.updateMethod(type, methodId);
   };
 
   const handleSaveCardChange = (value: boolean) => {
@@ -136,6 +129,17 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
               placeholders={state?.customization?.placeholders}
             />
           )}
+        {state?.customization?.paymentMethods?.show && (
+          <PaymentMethodsList
+            methods={state?.uiData.paymentMethods}
+            selectedMethod={state?.uiData?.payment_method || ''}
+            onMethodSelect={(methodId) => {
+              handleMethodSelect(methodId, 'payment_method');
+            }}
+            style={state?.customization?.styles?.paymentMethods}
+          />
+        )}
+
         {state?.customization?.showMessages &&
           state?.message &&
           state?.message !== '' &&
@@ -181,16 +185,6 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
               </Text>
             </View>
           )}
-        {state?.customization?.paymentMethods?.show && (
-          <PaymentMethodsList
-            methods={state?.uiData.paymentMethods}
-            selectedMethod={state?.uiData?.payment_method || ''}
-            onMethodSelect={(methodId) => {
-              handleMethodSelect(methodId, 'payment_method');
-            }}
-            style={state?.customization?.styles?.paymentMethods}
-          />
-        )}
 
         {state?.customization?.paymentButton?.show && (
           <ProcessButton
@@ -229,6 +223,7 @@ const styles = StyleSheet.create({
   },
   messageContainer: {
     paddingHorizontal: 20,
+    marginVertical: 5,
   },
   errorText: {
     color: 'red',

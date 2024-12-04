@@ -106,9 +106,9 @@ Each type can be specified when initializing the SDK through the TonderProvider:
 ## Secure token
 For card-related operations (save, list, delete), you need a secure token. This should be obtained through your backend for security:
 
-Environment URLs:
-- Staging: https://stage.tonder.io
-- Production: Contact Tonder team
+> **Important Note about SaveCard functionality**: 
+> To properly implement the SaveCard feature, you must use a SecureToken. For detailed implementation instructions and best practices, please refer to our official documentation on [How to use SecureToken for secure card saving](https://docs.tonder.io/integration/sdks/secure-token#how-to-use-securetoken-for-secure-card-saving).
+
 
 **Important**: Never expose your API secret key in frontend code. It is recommended to implement token generation in your backend.
 

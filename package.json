@@ -1,6 +1,6 @@
 {
   "name": "@tonder.io/rn-sdk",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Tonder react native sdk",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -17,6 +17,7 @@
       }
     }
   },
+  "types": "./lib/typescript/module/src/index.d.ts",
   "files": [
     "src",
     "lib",

@@ -23,6 +23,7 @@ export function multiply(a: number, b: number): Promise<number> {
 
 export * from './ui/components/Input/CardHolderInput';
 export * from './ui/components/Input/CardExpirationMonthInput';
+export * from './ui/components/Input/CardExpirationDateInput';
 export * from './ui/components/Input/CardExpirationYearInput';
 export * from './ui/components/Input/CardCVVInput';
 export * from './ui/components/Input/CardNumberInput';

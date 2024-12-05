@@ -1,6 +1,6 @@
 {
   "name": "@tonder.io/rn-sdk",
-  "version": "0.1.0-beta.DEV1355.9",
+  "version": "0.1.2",
   "description": "Tonder react native sdk",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -17,6 +17,7 @@
       }
     }
   },
+  "types": "./lib/typescript/module/src/index.d.ts",
   "files": [
     "src",
     "lib",
@@ -52,14 +53,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tonderio/rn-sdk.git.git/tonder.io-rn-sdk.git"
+    "url": "https://github.com/tonderio/rn-sdk.git"
   },
-  "author": "Tonder <davidh@tonder.io> (https://github.com/tonderio/rn-sdk.git.git)",
+  "author": "Tonder <davidh@tonder.io> (https://github.com/tonderio/rn-sdk.git)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tonderio/rn-sdk.git.git/tonder.io-rn-sdk/issues"
+    "url": "https://github.com/tonderio/rn-sdk.git"
   },
-  "homepage": "https://github.com/tonderio/rn-sdk.git.git/tonder.io-rn-sdk#readme",
+  "homepage": "https://github.com/tonderio/rn-sdk.git",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

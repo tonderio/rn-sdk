@@ -12,7 +12,7 @@ import type {
   IProcessPaymentRequest,
   ITransaction,
 } from '.';
-import type { IConfig } from 'skyflow-react-native';
+import type { IConfig } from 'skf-rnad';
 import { SDKType } from './base';
 
 export interface IBaseUIState {

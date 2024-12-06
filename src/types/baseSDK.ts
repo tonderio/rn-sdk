@@ -1,5 +1,5 @@
 import type { Business, IBaseState, ICustomerResponse } from '.';
-import type { IConfig } from 'skyflow-react-native';
+import type { IConfig } from 'skf-rnad';
 import { SDKType } from './base';
 
 export interface IBaseSDKState<T extends SDKType> extends IBaseState<T> {

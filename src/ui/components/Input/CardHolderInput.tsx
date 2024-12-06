@@ -9,7 +9,7 @@ import {
   DEFAULT_SKYFLOW_PLACEHOLDERS,
 } from '../../../shared/constants/skyflow';
 import { Text, View } from 'react-native';
-import { CardHolderNameElement } from 'skyflow-react-native';
+import { CardHolderNameElement } from 'skf-rnad';
 import {
   DEFAULT_SKYFLOW_ERROR_TEXT_STYLES,
   DEFAULT_SKYFLOW_INPUT_STYLES,

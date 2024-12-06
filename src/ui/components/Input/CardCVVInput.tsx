@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { CvvElement } from 'skyflow-react-native';
+import { CvvElement } from 'skf-rnad';
 import React, { useState } from 'react';
 import type { InputProps } from '../../../types';
 import {

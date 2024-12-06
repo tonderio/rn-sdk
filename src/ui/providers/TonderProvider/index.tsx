@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Tonder from '../../../core/Tonder';
 import type { ISDKBaseConfig, SDKInstance } from '../../../types';
 import { SDKType } from '../../../types';
-import { SkyflowProvider } from 'skyflow-react-native';
+import { SkyflowProvider } from 'skf-rnad';
 import SkyflowContainerWrapper from '../SkyflowContainerWrapper';
 import { ThreeDSWebView } from '../../components/WebView/ThreeDSWebView';
 import { EnrollmentContainer } from '../../../core/EnrollmentContainer';

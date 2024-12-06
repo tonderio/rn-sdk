@@ -5,7 +5,7 @@ import type {
   ICustomerResponse,
   IEnrollmentCallbacks,
 } from '.';
-import type { IConfig } from 'skyflow-react-native';
+import type { IConfig } from 'skf-rnad';
 import { SDKType } from './base';
 
 export interface IBaseEnrollmentState extends IBaseState<SDKType.ENROLLMENT> {

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useState } from 'react';
 import type { InputProps } from '../../../types';
-import { ExpirationMonthElement } from 'skyflow-react-native';
+import { ExpirationMonthElement } from 'skf-rnad';
 import {
   getErrorField,
   regexMatchRule,

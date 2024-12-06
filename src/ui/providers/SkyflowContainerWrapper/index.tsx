@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useCollectContainer } from 'skyflow-react-native';
+import { useCollectContainer } from 'skf-rnad';
 import InnerProvider from '../InnerProvider';
 import type { ITonderContext } from '../../../types';
 import { SDKType } from '../../../types';

@@ -1,4 +1,4 @@
-import { ValidationRuleType } from 'skyflow-react-native';
+import { ValidationRuleType } from 'skf-rnad';
 const lengthMatchRule = {
   type: ValidationRuleType.LENGTH_MATCH_RULE,
   params: {

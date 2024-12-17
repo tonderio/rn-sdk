@@ -106,7 +106,7 @@ Each type can be specified when initializing the SDK through the TonderProvider:
 ## Secure token
 For card-related operations (save, list, delete), you need a secure token. This should be obtained through your backend for security:
 
-> **Important Note about SaveCard functionality**: 
+> **Important Note about SaveCard functionality**:
 > To properly implement the SaveCard feature, you must use a SecureToken. For detailed implementation instructions and best practices, please refer to our official documentation on [How to use SecureToken for secure card saving](https://docs.tonder.io/integration/sdks/secure-token#how-to-use-securetoken-for-secure-card-saving).
 
 
@@ -824,13 +824,17 @@ These options allow you to customize the text of the labels and placeholders for
 #### Form Labels
 Customization of field labels:
 
-| Property   | Type   | Default                 | Description                            |
-|------------|--------|-------------------------|----------------------------------------|
-| name       | string | "Titular de la tarjeta" | Label for the cardholder's name field. |
-| cardNumber | string | "Número de tarjeta"     | Label for the card number field.       |
-| cvv        | string | "CVV"                   | Label for the security code field.     |
-| expiryDate | string | "Fecha de expiración"   | Label for the expiration date fields.  |
-| expiryDate | string | "Fecha de expiración"   | Label for the expiration date fields.  |
+| Property              | Type   | Default                              | Description                                                           |
+|-----------------------|--------|--------------------------------------|-----------------------------------------------------------------------|
+| name                  | string | "Titular de la tarjeta"              | Label for the cardholder's name field.                                |
+| cardNumber            | string | "Número de tarjeta"                  | Label for the card number field.                                      |
+| cvv                   | string | "CVV"                                | Label for the security code field.                                    |
+| expiryDate            | string | "Fecha de expiración"                | Label for the expiration date fields.                                 |
+| saveCardFuturePayment | string | "Guardar tarjeta para futuros pagos" | Label for the save card for future payments.                          |
+| saveCardCheckedIcon   | string | "✓"                                  | Label for checked icon of the save card for future payments checkbox. |
+| expirationCard        | string | "Exp."                               | Label for the expiration card text.                                   |
+| payWithCard           | string | "Pagar con tarjeta"                  | Label for pay with card option.                                       |
+
 
 <details>
 <summary>View Form Labels Interface</summary>
@@ -841,6 +845,10 @@ interface IFormLabels {
  cardNumber?: string;
  cvv?: string;
  expiryDate?: string;
+ saveCardFuturePayment?: string;
+ saveCardCheckedIcon?: string;
+ expirationCard?: string;
+ payWithCard?: string;
 }
 ```
 </details>
@@ -1085,16 +1093,17 @@ export interface IStyles {
 
 The style customization for Full integrations (INLINE and ENROLLMENT) is done through a styles object in the SDK configuration.
 
-| Component          | Description               | Properties                                                                                                                                                                                                        |
-|--------------------|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **sdkCard**        | Main container of the SDK | `base`: StylesBaseVariant                                                                                                                                                                                         |
-| **cardForm**       | Card form section         | - `base`: StylesBaseVariant<br>- `inputStyles`: CollectInputStylesVariant<br>- `labelStyles`: CollectInputStylesVariant<br>-  `errorStyles`:StylesBaseVariant                                                     |
-| **savedCards**     | Saved cards list section  | - `base`: StylesBaseVariant<br>- `radioBase`: ViewStyle<br>- `radioInner`: ViewStyle<br>-   `radioSelected`: ViewStyle<br>-   `cardIcon`: ViewStyle<br>-   `deleteButton`: ViewStyle<br>-`deteleIcon`:  ViewStyle |
-| **paymentMethods** | Payment methods section   | - `base`: StylesBaseVariant<br>- `radioBase`: ViewStyle<br>- `radioInner`: ViewStyle<br>-   `radioSelected`: ViewStyle<br>                                                                                        |
-| **paymentRadio**   | Payment method selector   | - `base`: StylesBaseVariant<br>- `radioBase`: ViewStyle<br>- `radioInner`: ViewStyle<br>-   `radioSelected`: ViewStyle<br>                                                                                        |
-| **paymentButton**  | Payment button            | `base`: ViewStyle                                                                                                                                                                                                 |
-| **errorMessage**   | Error message display     | `base`: TextStyle                                                                                                                                                                                                 |
-| **successMessage** | Success message display   | `base`: TextStyle                                                                                                                                                                                                 |
+| Component          | Description               | Properties                                                                                                                                                                                                                                                        |
+|--------------------|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **sdkCard**        | Main container of the SDK | `base`: StylesBaseVariant                                                                                                                                                                                                                                         |
+| **cardForm**       | Card form section         | - `base`: StylesBaseVariant<br>- `inputStyles`: CollectInputStylesVariant<br>- `labelStyles`: CollectInputStylesVariant<br>-  `errorStyles`:StylesBaseVariant<br>-  `saveCardOption`:StylesCheckboxVariant                                                        |
+| **savedCards**     | Saved cards list section  | - `base`: StylesBaseVariant<br>- `radioBase`: StylesBaseVariant<br>- `radioInner`: StylesBaseVariant<br>-   `radioSelected`: StylesBaseVariant<br>-   `cardIcon`: StylesBaseVariant<br>-   `deleteButton`: StylesBaseVariant<br>-`deteleIcon`:  StylesBaseVariant |
+| **paymentMethods** | Payment methods section   | - `base`: StylesBaseVariant<br>- `radioBase`: StylesBaseVariant<br>- `radioInner`: StylesBaseVariant<br>-   `radioSelected`: StylesBaseVariant<br>                                                                                                                |
+| **paymentRadio**   | Payment method selector   | - `base`: StylesBaseVariant<br>- `radioBase`: StylesBaseVariant<br>- `radioInner`: StylesBaseVariant<br>-   `radioSelected`: StylesBaseVariant<br>                                                                                                                |
+| **paymentButton**  | Payment button            | `base`: StylesBaseVariant                                                                                                                                                                                                                                         |
+| **errorMessage**   | Error message display     | `base`: TextStyle                                                                                                                                                                                                                                                 |
+| **successMessage** | Success message display   | `base`: TextStyle                                                                                                                                                                                                                                                 |
+| **skeletonCard**   | Skeleton                  | - `base`: StylesBaseVariant<br>- `fullField`: StylesBaseVariant<br>- `compactField`: StylesBaseVariant<br>-   `compactRow`: StylesBaseVariant<br>-   `animatedBGColors`: [string, string]<br>                                                                     |
 
 #### Full customization example
 
@@ -1135,6 +1144,21 @@ const styles = {
         marginBottom: 6,
       },
     },
+    saveCardOption: {
+      base: {
+        marginTop: 15,
+        color: '#4a4a4a',
+      },
+      checkboxBase: {
+        borderColor: '#4a4a4a',
+      },
+      checkboxCheckedBase: {
+        backgroundColor: '#35c6c1',
+      },
+      checkedIcon: {
+        color: '#2c2929',
+      },
+    },
   },
   savedCards: {
     base: {
@@ -1144,6 +1168,11 @@ const styles = {
       marginVertical: 6,
       borderWidth: 1,
       borderColor: '#e3e3e3',
+    },
+    cardItem: {
+      base: {
+        borderBottomColor: '#e2e8f0',
+      },
     },
   },
   paymentRadio: {
@@ -1193,12 +1222,25 @@ const styles = {
     },
   },
   errorMessage: {
-   base: {
-     color: '#dc3545',
-     fontSize: 14,
-     marginTop: 4,
-   },
- },
+    base: {
+      color: '#9a0832',
+      fontWeight: '600',
+      fontSize: 16,
+      textAlign: 'center',
+      marginTop: 20,
+    },
+  },
+  skeletonCard: {
+    base: {
+      backgroundColor: '#F9F9F9',
+    },
+    fullField: {
+      base: {
+        borderRadius: 8,
+      },
+    },
+    animatedBGColors: ['#e0e0e0', '#c8c7c7'],
+  },
 };
 
 const { create } = useTonder<SDKType.INLINE>();

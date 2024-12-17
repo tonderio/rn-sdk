@@ -26,7 +26,12 @@ const TonderEnrollment: React.FC<ITonderEnrollmentProps> = () => {
 
   return (
     <View style={styles.container}>
-      {state?.isCreating && <CardFormSkeleton message={state?.message} />}
+      {state?.isCreating && (
+        <CardFormSkeleton
+          style={state?.customization?.styles?.skeletonCard}
+          message={state?.message}
+        />
+      )}
       <View
         style={{
           ...DEFAULT_PAYMENT_CONTAINER.base,

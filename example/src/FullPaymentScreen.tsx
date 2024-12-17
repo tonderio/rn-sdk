@@ -7,7 +7,7 @@ import {
   Alert,
 } from 'react-native';
 import {
-  IBaseProcessPaymentRequest,
+  type IBaseProcessPaymentRequest,
   SDKType,
   TonderPayment,
   useTonder,

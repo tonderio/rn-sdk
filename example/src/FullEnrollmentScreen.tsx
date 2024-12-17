@@ -7,7 +7,7 @@ import {
   Alert,
 } from 'react-native';
 import {
-  ICustomer,
+  type ICustomer,
   useTonder,
   TonderEnrollment,
   SDKType,

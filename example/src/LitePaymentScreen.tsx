@@ -15,7 +15,7 @@ import {
   CardExpirationYearInput,
   CardHolderInput,
   CardNumberInput,
-  IProcessPaymentRequest,
+  type IProcessPaymentRequest,
   SDKType,
   useTonder,
 } from '@tonder.io/rn-sdk';

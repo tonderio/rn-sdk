@@ -1,10 +1,9 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import type {
-  IElementStyle,
+  ICardFormStyles,
   IFormLabels,
   IFormPlaceholder,
-  StylesBaseVariant,
 } from '../../../types';
 import { CardHolderInput } from '../Input/CardHolderInput';
 import { CardNumberInput } from '../Input/CardNumberInput';
@@ -18,7 +17,7 @@ interface NewCardFormProps {
   onSaveCardChange: (save: boolean) => void;
   labels?: IFormLabels;
   placeholders?: IFormPlaceholder;
-  style?: StylesBaseVariant & IElementStyle;
+  style?: ICardFormStyles;
 }
 
 export const NewCardForm: React.FC<NewCardFormProps> = ({
@@ -59,7 +58,12 @@ export const NewCardForm: React.FC<NewCardFormProps> = ({
         <CheckBox
           checked={saveCard}
           onValueChange={onSaveCardChange}
-          label="Guardar tarjeta para futuros pagos"
+          label={
+            labels?.saveCardFuturePayment ||
+            'Guardar tarjeta para futuros pagos'
+          }
+          style={style?.saveCardOption}
+          checkedIcon={labels?.saveCardCheckedIcon}
         />
       )}
     </View>

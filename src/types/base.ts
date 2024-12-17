@@ -10,11 +10,13 @@ import type {
   IPaymentLiteContainer,
 } from '.';
 import type TonderError from '../shared/utils/errors';
-import type PaymentInlineContainer from '../core/PaymentInlineContainer';
-import type PaymentLiteContainer from '../core/PaymentLiteContainer';
-import type { EnrollmentContainer } from '../core/EnrollmentContainer';
 
-export type Environment = 'production' | 'sandbox' | 'stage' | 'development';
+export enum Environment {
+  production = 'production',
+  sandbox = 'sandbox',
+  stage = 'stage',
+  development = 'development',
+}
 
 export enum SDKType {
   INLINE = 'inline',
@@ -26,10 +28,6 @@ export type IBaseResponse<T> =
   | { response: T; error?: never }
   | { response?: never; error: TonderError };
 
-export type SDKsContainer =
-  | PaymentInlineContainer
-  | PaymentLiteContainer
-  | EnrollmentContainer;
 export interface ISDKBaseConfig {
   mode: Environment;
   apiKey: string;

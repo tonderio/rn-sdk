@@ -1,8 +1,34 @@
 import React from 'react';
 import { View, StyleSheet, Animated, Easing, Text } from 'react-native';
+import type { ISkeletonCardStyles, StylesBaseVariant } from '@tonder.io/rn-sdk';
+import { buildBaseStyleText } from '../../../shared/utils/styleUtils';
 
-const CardFormSkeleton = ({ message }: { message?: string }) => {
-  const animatedValue = new Animated.Value(0);
+const SkeletonItem = ({
+  styleItem,
+  interpolatedColor,
+}: {
+  styleItem?: StylesBaseVariant;
+  interpolatedColor: Animated.AnimatedInterpolation<string | number>;
+}) => (
+  <Animated.View
+    style={[
+      styles.skeletonLoader,
+      ...(styleItem?.base ? [styleItem.base] : []),
+      { backgroundColor: interpolatedColor },
+    ]}
+  />
+);
+
+const CardFormSkeleton = ({
+  message,
+  style,
+  errorMessageStyle,
+}: {
+  message?: string;
+  style?: ISkeletonCardStyles;
+  errorMessageStyle?: StylesBaseVariant;
+}) => {
+  const animatedValue = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
     Animated.loop(
@@ -25,42 +51,71 @@ const CardFormSkeleton = ({ message }: { message?: string }) => {
 
   const interpolatedColor = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ['#e0e0e0', '#f0f0f0'],
+    outputRange: style?.animatedBGColors || ['#e0e0e0', '#dddddd'],
   });
 
-  const SkeletonItem = () => (
-    <Animated.View
-      style={[styles.skeletonLoader, { backgroundColor: interpolatedColor }]}
-    />
-  );
-
   return (
-    <View style={styles.container}>
-      <SkeletonItem />
-      <SkeletonItem />
-      <View style={styles.collectRow}>
+    <View
+      style={{
+        ...styles.container,
+        ...(style?.base || {}),
+        ...styles.containerBase,
+      }}
+    >
+      <SkeletonItem
+        styleItem={style?.fullField}
+        interpolatedColor={interpolatedColor}
+      />
+      <SkeletonItem
+        styleItem={style?.fullField}
+        interpolatedColor={interpolatedColor}
+      />
+      <View
+        style={{
+          ...styles.collectRow,
+          ...(style?.compactRow?.base || {}),
+        }}
+      >
         <Animated.View
           style={[
+            styles.skeletonLoader,
+            ...(style?.compactField?.base ? [style?.compactField?.base] : []),
             styles.skeletonLoaderItem,
             { backgroundColor: interpolatedColor },
           ]}
         />
         <Animated.View
           style={[
+            styles.skeletonLoader,
+            ...(style?.compactField?.base ? [style?.compactField?.base] : []),
             styles.skeletonLoaderItem,
             { backgroundColor: interpolatedColor },
           ]}
         />
         <Animated.View
           style={[
+            styles.skeletonLoader,
+            ...(style?.compactField?.base ? [style?.compactField?.base] : []),
             styles.skeletonLoaderItem,
             { backgroundColor: interpolatedColor },
           ]}
         />
       </View>
       {!!message && (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{message}</Text>
+        <View
+          style={{
+            ...styles.errorContainer,
+            ...(errorMessageStyle?.base || {}),
+          }}
+        >
+          <Text
+            style={{
+              ...styles.errorText,
+              ...buildBaseStyleText(errorMessageStyle),
+            }}
+          >
+            {message}
+          </Text>
         </View>
       )}
     </View>
@@ -68,17 +123,19 @@ const CardFormSkeleton = ({ message }: { message?: string }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  containerBase: {
     position: 'absolute',
     top: 0,
     left: 0,
     width: '100%',
     height: '100%',
+    zIndex: 1,
+  },
+  container: {
     backgroundColor: '#F9F9F9',
     padding: 20,
     flex: 1,
     gap: 20,
-    zIndex: 1,
   },
   collectRow: {
     flexDirection: 'row',
@@ -93,12 +150,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   skeletonLoaderItem: {
-    height: 35,
-    borderRadius: 8,
     flex: 1,
+    marginVertical: 0,
+    marginHorizontal: 0,
   },
   errorContainer: {
-    paddingHorizontal: 11,
+    paddingHorizontal: 20,
+    marginVertical: 5,
   },
   errorText: {
     color: 'red',

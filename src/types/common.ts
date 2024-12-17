@@ -7,6 +7,13 @@ export interface StylesBaseVariant {
   base?: Record<string, any>;
 }
 
+export interface StylesCheckboxVariant {
+  base?: Record<string, any>;
+  checkboxBase?: Record<string, any>;
+  checkboxCheckedBase?: Record<string, any>;
+  checkedIcon?: Record<string, any>;
+}
+
 export interface StylesSelectVariant {
   base?: Record<string, any>;
   radioBase?: Record<string, any>;
@@ -16,6 +23,7 @@ export interface StylesSelectVariant {
 }
 
 export interface StylesSavedCardsVariant extends StylesSelectVariant {
+  cardItem?: StylesBaseVariant;
   deleteButton?: Record<string, any>;
   deleteIcon?: Record<string, any>;
 }
@@ -40,6 +48,10 @@ export interface IFormLabels {
   cardNumber?: string;
   cvv?: string;
   expiryDate?: string;
+  saveCardFuturePayment?: string;
+  saveCardCheckedIcon?: string;
+  expirationCard?: string;
+  payWithCard?: string;
 }
 
 export interface IFormPlaceholder {
@@ -52,13 +64,25 @@ export interface IFormPlaceholder {
 
 export interface IStyles {
   sdkCard?: StylesBaseVariant;
-  cardForm?: StylesBaseVariant & IElementStyle;
+  skeletonCard?: ISkeletonCardStyles;
+  cardForm?: ICardFormStyles;
   paymentMethods?: StylesSelectVariant;
   savedCards?: StylesSavedCardsVariant;
   paymentRadio?: StylesSelectVariant;
   paymentButton?: StylesBaseVariant;
   errorMessage?: StylesBaseVariant;
   successMessage?: StylesBaseVariant;
+}
+
+export interface ICardFormStyles extends StylesBaseVariant, IElementStyle {
+  saveCardOption?: StylesCheckboxVariant;
+}
+
+export interface ISkeletonCardStyles extends StylesBaseVariant {
+  fullField?: StylesBaseVariant;
+  compactField?: StylesBaseVariant;
+  compactRow?: StylesBaseVariant;
+  animatedBGColors?: [string, string];
 }
 
 export interface ITonderContext<T extends SDKType> {

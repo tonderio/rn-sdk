@@ -22,6 +22,7 @@ interface SavedCardsListProps {
   deletingCards?: string[];
   style?: StylesSavedCardsVariant;
   showDeleteButton?: boolean;
+  expirationLabel?: string;
 }
 
 const SavedCardsList: React.FC<SavedCardsListProps> = ({
@@ -32,6 +33,7 @@ const SavedCardsList: React.FC<SavedCardsListProps> = ({
   deletingCards,
   showDeleteButton = true,
   style,
+  expirationLabel = 'Exp.',
 }) => {
   if (!cards.length) return null;
 
@@ -42,8 +44,17 @@ const SavedCardsList: React.FC<SavedCardsListProps> = ({
   };
   return (
     <View style={{ ...styles.container, ...(style?.base || {}) }}>
-      {cards.map((card) => (
-        <View key={card.fields.skyflow_id} style={styles.cardItem}>
+      {cards.map((card, index) => (
+        <View
+          key={card.fields.skyflow_id}
+          style={[
+            styles.cardItem,
+            { ...{ ...(style?.cardItem?.base || {}) } },
+            index === cards.length - 1 && {
+              borderBottomWidth: 0,
+            },
+          ]}
+        >
           <RadioButton
             style={{
               base: style?.radioBase,
@@ -73,7 +84,8 @@ const SavedCardsList: React.FC<SavedCardsListProps> = ({
                 ...buildBaseStyleText(style),
               }}
             >
-              Exp. {card.fields.expiration_month}/{card.fields.expiration_year}
+              {expirationLabel} {card.fields.expiration_month}/
+              {card.fields.expiration_year}
             </Text>
           </View>
           {(deletingCards || []).includes(card.fields.skyflow_id) && (

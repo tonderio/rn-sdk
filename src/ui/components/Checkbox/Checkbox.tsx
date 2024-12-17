@@ -1,25 +1,50 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import type { StylesCheckboxVariant } from '../../../types';
+import { buildBaseStyleText } from '../../../shared/utils/styleUtils';
 
 interface CheckBoxProps {
   checked: boolean;
   onValueChange: (value: boolean) => void;
   label: string;
+  checkedIcon?: string;
+  style?: StylesCheckboxVariant;
 }
 
 export const CheckBox: React.FC<CheckBoxProps> = ({
   checked,
   onValueChange,
   label,
+  style,
+  checkedIcon = '✓',
 }) => (
   <TouchableOpacity
-    style={styles.checkboxContainer}
+    style={{ ...styles.checkboxContainer, ...(style?.base || {}) }}
     onPress={() => onValueChange(!checked)}
   >
-    <View style={[styles.checkbox, checked && styles.checkboxChecked]}>
-      {checked && <Text style={styles.checkmark}>✓</Text>}
+    <View
+      style={[
+        { ...styles.checkbox, ...(style?.checkboxBase || {}) },
+        checked && {
+          ...styles.checkboxChecked,
+          ...(style?.checkboxCheckedBase || {}),
+        },
+      ]}
+    >
+      {checked && (
+        <Text style={{ ...styles.checkmark, ...(style?.checkedIcon || {}) }}>
+          {checkedIcon}
+        </Text>
+      )}
     </View>
-    <Text style={styles.checkboxLabel}>{label}</Text>
+    <Text
+      style={{
+        ...styles.checkboxLabel,
+        ...buildBaseStyleText(style),
+      }}
+    >
+      {label}
+    </Text>
   </TouchableOpacity>
 );
 const styles = StyleSheet.create({

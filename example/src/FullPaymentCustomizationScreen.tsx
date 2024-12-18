@@ -7,7 +7,7 @@ import {
   Alert,
 } from 'react-native';
 import {
-  IBaseProcessPaymentRequest,
+  type IBaseProcessPaymentRequest,
   SDKType,
   TonderPayment,
   useTonder,
@@ -86,6 +86,10 @@ export default function FullPaymentCustomizationScreen() {
           cvv: 'CVV',
           cardNumber: 'Card Number',
           expiryDate: 'Expiration Date',
+          saveCardFuturePayment: 'Guardar tarjeta para futuros pagos.',
+          saveCardCheckedIcon: '✓',
+          expirationCard: 'Exp.',
+          payWithCard: 'Pagar con tarjeta',
         },
         placeholders: {
           cvv: '123',
@@ -130,6 +134,21 @@ export default function FullPaymentCustomizationScreen() {
                 marginBottom: 6,
               },
             },
+            saveCardOption: {
+              base: {
+                marginTop: 15,
+                color: '#4a4a4a',
+              },
+              checkboxBase: {
+                borderColor: '#4a4a4a',
+              },
+              checkboxCheckedBase: {
+                backgroundColor: '#35c6c1',
+              },
+              checkedIcon: {
+                color: '#2c2929',
+              },
+            },
           },
           savedCards: {
             base: {
@@ -139,6 +158,11 @@ export default function FullPaymentCustomizationScreen() {
               marginVertical: 6,
               borderWidth: 1,
               borderColor: '#e3e3e3',
+            },
+            cardItem: {
+              base: {
+                borderBottomColor: '#e2e8f0',
+              },
             },
           },
           paymentRadio: {
@@ -186,6 +210,26 @@ export default function FullPaymentCustomizationScreen() {
               textAlign: 'center',
               marginTop: 20,
             },
+          },
+          errorMessage: {
+            base: {
+              color: '#9a0832',
+              fontWeight: '600',
+              fontSize: 16,
+              textAlign: 'center',
+              marginTop: 20,
+            },
+          },
+          skeletonCard: {
+            base: {
+              backgroundColor: '#F9F9F9',
+            },
+            fullField: {
+              base: {
+                borderRadius: 8,
+              },
+            },
+            animatedBGColors: ['#e0e0e0', '#c8c7c7'],
           },
         },
       },

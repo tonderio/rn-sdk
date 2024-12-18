@@ -55,7 +55,12 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
 
   return (
     <View style={styles.container}>
-      {state?.isCreating && <CardFormSkeleton message={state?.message} />}
+      {state?.isCreating && (
+        <CardFormSkeleton
+          style={state?.customization?.styles?.skeletonCard}
+          message={state?.message}
+        />
+      )}
       <View
         style={{
           ...DEFAULT_PAYMENT_CONTAINER.base,
@@ -66,6 +71,7 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
         {state?.customization?.saveCards?.showSaved && (
           <SavedCardsList
             style={state?.customization?.styles?.savedCards}
+            expirationLabel={state?.customization?.labels?.expirationCard}
             cards={state.uiData?.cards}
             selectedMethod={state?.uiData?.card || ''}
             onMethodSelect={(methodId) => {
@@ -110,7 +116,7 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
                 ),
               }}
             >
-              Pagar con tarjeta
+              {state?.customization?.labels?.payWithCard || 'Pagar con tarjeta'}
             </Text>
           </View>
         )}
@@ -210,6 +216,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#e2e8f0',
+    borderTopWidth: 1,
+    borderTopColor: '#e2e8f0',
   },
   cardImage: {
     width: 32,

@@ -82,6 +82,11 @@ export default function FullPaymentScreen() {
           onChange: handleOnChange,
           onFocus: handleOnFocus,
         },
+        cardNumberEvents: {
+          onBlur: handleOnBlur,
+          onChange: handleOnChange,
+          onFocus: handleOnFocus,
+        },
         // add more events...
       },
     });

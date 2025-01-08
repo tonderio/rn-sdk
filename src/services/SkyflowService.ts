@@ -3,6 +3,7 @@ import { HttpClient } from '../infrastructure';
 import { ErrorKeyEnum } from '../shared';
 import type { IConfig } from 'skf-rnad';
 import { Env, LogLevel } from 'skf-rnad';
+import { Environment } from '@tonder.io/rn-sdk';
 
 export class SkyflowService {
   private readonly BASE_PATH = '/api/v1/vault-token';
@@ -36,13 +37,16 @@ export class SkyflowService {
     }
   }
 
-  async createSkyflowConfig(merchantData: any): Promise<IConfig> {
+  async createSkyflowConfig(
+    merchantData: any,
+    environment: Environment
+  ): Promise<IConfig> {
     return {
       vaultID: merchantData.vault_id,
       vaultURL: merchantData.vault_url,
       options: {
         logLevel: LogLevel.ERROR,
-        env: Env.DEV,
+        env: environment === Environment.production ? Env.PROD : Env.DEV,
       },
       getBearerToken: async () => await this.getVaultToken(),
     };

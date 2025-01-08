@@ -1080,6 +1080,9 @@ export default function EnrollmentButtonScreen() {
 ## Events
 The SDK provides event handling capabilities for card form input fields, supporting both Full/Enrollment SDK and Lite SDK implementations.
 
+
+> **Note:** Values of TonderInputs will be returned in element state object only in Develop environment, but in case of CARD_NUMBER type element when the environment is production for all the card types except AMEX, it will return first eight digits, for AMEX it will return first six digits and rest all digits in masked format.
+
 ### Event Types
 Each event object supports:
 - `onChange`: Called when input value changes

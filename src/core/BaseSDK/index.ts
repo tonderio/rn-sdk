@@ -81,7 +81,10 @@ class BaseSDK {
     if (merchantData?.vault_id && merchantData?.vault_url) {
       const skyflowConfig = await this.tonderClient
         .getService()
-        .skyflow.createSkyflowConfig(merchantData);
+        .skyflow.createSkyflowConfig(
+          merchantData,
+          this.tonderClient.getConfig().mode
+        );
 
       this.setSkyflowConfig(skyflowConfig);
 

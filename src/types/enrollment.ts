@@ -1,4 +1,4 @@
-import type { IBaseCreateOptions, IBaseResponse, SDKOptions } from './base';
+import type { IBaseCreateOptions, IBaseResponse, IEvents, SDKOptions } from './base';
 import type { IBaseEnrollmentState } from './baseEnrollment';
 import { SDKType } from './base';
 import type { ISaveCardResponse } from './card';
@@ -10,6 +10,7 @@ export interface IEnrollmentOptions extends IBaseCreateOptions {
   customer?: ICustomer;
   customization?: IEnrollmentCustomizationOptions;
   callbacks?: IEnrollmentCallbacks;
+  events?: IEvents;
 }
 
 export interface IEnrollmentCallbacks {
@@ -30,6 +31,7 @@ export interface IEnrollmentCustomizationOptions {
 export interface IEnrollmentState extends IBaseEnrollmentState {
   customization?: IEnrollmentCustomizationOptions;
   callbacks?: IEnrollmentCallbacks;
+  events?: IEvents;
   message: string;
 }
 export interface IEnrollment {

@@ -47,6 +47,7 @@ const TonderEnrollment: React.FC<ITonderEnrollmentProps> = () => {
             style={state?.customization?.styles?.cardForm}
             labels={state?.customization?.labels}
             placeholders={state?.customization?.placeholders}
+            events={state?.events}
           />
         )}
         {state?.customization?.showMessages &&

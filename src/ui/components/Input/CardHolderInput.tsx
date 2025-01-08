@@ -23,6 +23,9 @@ export const CardHolderInput: React.FC<InputProps> = ({
   placeholder = DEFAULT_SKYFLOW_PLACEHOLDERS.namePlaceholder,
   label = DEFAULT_SKYFLOW_lABELS.nameLabel,
   style,
+  onFocus,
+  onBlur,
+  onChange,
 }) => {
   const { state } = useTonderContext();
 
@@ -72,12 +75,16 @@ export const CardHolderInput: React.FC<InputProps> = ({
                   }
                 : {}),
             }}
-            onChange={() => {
+            onChange={(event) => {
               setErrorText('');
+              if (onChange) onChange(event);
             }}
-            // onFocus={props.onFocus}
-            onBlur={(e) => {
-              setErrorText(getErrorField(e, label));
+            onFocus={(event) => {
+              if (onFocus) onFocus(event);
+            }}
+            onBlur={(event) => {
+              setErrorText(getErrorField(event, label));
+              if (onBlur) onBlur(event);
             }}
             // onReady={props.onReady}
           />

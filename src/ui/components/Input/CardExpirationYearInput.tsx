@@ -22,6 +22,9 @@ export const CardExpirationYearInput: React.FC<InputProps> = ({
   placeholder = DEFAULT_SKYFLOW_PLACEHOLDERS.expiryYearPlaceholder,
   label = DEFAULT_SKYFLOW_lABELS.expiryYearLabel,
   style,
+  onFocus,
+  onBlur,
+  onChange,
 }) => {
   const { state } = useTonderContext();
   const [errorText, setErrorText] = useState('');
@@ -72,12 +75,16 @@ export const CardExpirationYearInput: React.FC<InputProps> = ({
                   }
                 : {}),
             }}
-            onChange={() => {
+            onChange={(event) => {
               setErrorText('');
+              if (onChange) onChange(event);
             }}
-            // onFocus={props.onFocus}
-            onBlur={(e) => {
-              setErrorText(getErrorField(e, label));
+            onFocus={(event) => {
+              if (onFocus) onFocus(event);
+            }}
+            onBlur={(event) => {
+              setErrorText(getErrorField(event, label));
+              if (onBlur) onBlur(event);
             }}
             // onReady={props.onReady}
           />

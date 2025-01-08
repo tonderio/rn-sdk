@@ -35,6 +35,7 @@ class BaseEnrollment extends BaseSDK {
         ...data,
         isCreated: false,
         isCreating: true,
+        events: data.events || {},
         customization: {
           ...this.#defaultCustomization,
           ...(data.customization || {}),

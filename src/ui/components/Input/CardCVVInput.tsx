@@ -22,6 +22,9 @@ export const CardCVVInput: React.FC<InputProps> = ({
   placeholder = DEFAULT_SKYFLOW_PLACEHOLDERS.cvvPlaceholder,
   label = DEFAULT_SKYFLOW_lABELS.cvvLabel,
   style,
+  onFocus,
+  onBlur,
+  onChange,
 }) => {
   const [errorText, setErrorText] = useState('');
   const { state } = useTonderContext();
@@ -71,12 +74,16 @@ export const CardCVVInput: React.FC<InputProps> = ({
                   }
                 : {}),
             }}
-            onChange={() => {
+            onChange={(event) => {
               setErrorText('');
+              if (onChange) onChange(event);
             }}
-            // onFocus={props.onFocus}
-            onBlur={(e) => {
-              setErrorText(getErrorField(e, label));
+            onFocus={(event) => {
+              if (onFocus) onFocus(event);
+            }}
+            onBlur={(event) => {
+              setErrorText(getErrorField(event, label));
+              if (onBlur) onBlur(event);
             }}
             // onReady={props.onReady}
           />

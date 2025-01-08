@@ -133,6 +133,7 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
               style={state?.customization?.styles?.cardForm}
               labels={state?.customization?.labels}
               placeholders={state?.customization?.placeholders}
+              events={state?.events}
             />
           )}
         {state?.customization?.paymentMethods?.show && (

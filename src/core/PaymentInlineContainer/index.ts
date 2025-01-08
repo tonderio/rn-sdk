@@ -84,6 +84,7 @@ class PaymentInlineContainer implements IPaymentInlineContainer {
         paymentMethods: [],
         cards: [],
       },
+      events: data.events || {},
       isCreating: true,
       isCreated: false,
     });

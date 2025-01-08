@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {
   type IBaseProcessPaymentRequest,
+  type IEventSecureInput,
   SDKType,
   TonderPayment,
   useTonder,
@@ -75,6 +76,14 @@ export default function FullPaymentScreen() {
       callbacks: {
         onFinishPayment: callbackFinish,
       },
+      events: {
+        cardHolderEvents: {
+          onBlur: handleOnBlur,
+          onChange: handleOnChange,
+          onFocus: handleOnFocus,
+        },
+        // add more events...
+      },
     });
 
     if (error) {
@@ -103,6 +112,16 @@ export default function FullPaymentScreen() {
     // Reset the state and regenerate the SDK to use it again.
     reset();
     await initialize();
+  };
+
+  const handleOnChange = (event: IEventSecureInput) => {
+    console.log('Received change event: ', event);
+  };
+  const handleOnBlur = (event: IEventSecureInput) => {
+    console.log('Received blur event: ', event);
+  };
+  const handleOnFocus = (event: IEventSecureInput) => {
+    console.log('Received focus event: ', event);
   };
 
   return (

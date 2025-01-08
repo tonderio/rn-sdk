@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import type {
+  ICardFormEvents,
   ICardFormStyles,
   IFormLabels,
   IFormPlaceholder,
@@ -18,6 +19,7 @@ interface NewCardFormProps {
   labels?: IFormLabels;
   placeholders?: IFormPlaceholder;
   style?: ICardFormStyles;
+  events?: ICardFormEvents;
 }
 
 export const NewCardForm: React.FC<NewCardFormProps> = ({
@@ -27,6 +29,7 @@ export const NewCardForm: React.FC<NewCardFormProps> = ({
   style,
   labels,
   placeholders,
+  events,
 }) => {
   return (
     <View style={{ ...styles.container, ...(style?.base || {}) }}>
@@ -34,11 +37,17 @@ export const NewCardForm: React.FC<NewCardFormProps> = ({
         style={style}
         label={labels?.name}
         placeholder={placeholders?.name}
+        onBlur={events?.cardHolderEvents?.onBlur}
+        onChange={events?.cardHolderEvents?.onChange}
+        onFocus={events?.cardHolderEvents?.onFocus}
       />
       <CardNumberInput
         style={style}
         label={labels?.cardNumber}
         placeholder={placeholders?.cardNumber}
+        onBlur={events?.cardNumberEvents?.onBlur}
+        onChange={events?.cardNumberEvents?.onChange}
+        onFocus={events?.cardNumberEvents?.onFocus}
       />
       <View style={styles.expirationRow}>
         <CardExpirationDateInput
@@ -46,11 +55,18 @@ export const NewCardForm: React.FC<NewCardFormProps> = ({
           label={labels?.expiryDate}
           yearPlaceholder={placeholders?.expiryYear}
           monthPlaceholder={placeholders?.expiryMonth}
+          events={{
+            monthEvents: events?.monthEvents,
+            yearEvents: events?.yearEvents,
+          }}
         />
         <CardCVVInput
           style={style}
           label={labels?.cvv}
           placeholder={placeholders?.cvv}
+          onBlur={events?.cvvEvents?.onBlur}
+          onChange={events?.cvvEvents?.onChange}
+          onFocus={events?.cvvEvents?.onFocus}
         />
       </View>
 

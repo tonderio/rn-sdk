@@ -11,6 +11,7 @@ import {
   useTonder,
   TonderEnrollment,
   SDKType,
+  type IEventSecureInput,
 } from '@tonder.io/rn-sdk';
 import { useEffect } from 'react';
 import { getSecureToken } from './utils/utils';
@@ -53,6 +54,14 @@ export default function FullEnrollmentScreen() {
       callbacks: {
         onFinishSave: callbackFinish,
       },
+      events: {
+        cardHolderEvents: {
+          onBlur: handleOnBlur,
+          onChange: handleOnChange,
+          onFocus: handleOnFocus,
+        },
+        // add more events...
+      },
     });
 
     if (error) {
@@ -75,6 +84,17 @@ export default function FullEnrollmentScreen() {
     reset();
     await initialize();
   };
+
+  const handleOnChange = (event: IEventSecureInput) => {
+    console.log('Received change event: ', event);
+  };
+  const handleOnBlur = (event: IEventSecureInput) => {
+    console.log('Received blur event: ', event);
+  };
+  const handleOnFocus = (event: IEventSecureInput) => {
+    console.log('Received focus event: ', event);
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />

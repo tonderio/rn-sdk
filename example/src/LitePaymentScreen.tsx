@@ -15,6 +15,7 @@ import {
   CardExpirationYearInput,
   CardHolderInput,
   CardNumberInput,
+  type IEventSecureInput,
   type IProcessPaymentRequest,
   SDKType,
   useTonder,
@@ -117,6 +118,17 @@ export default function LitePaymentScreen() {
 
     console.log('Response payment: ', response);
   };
+
+  const handleOnChange = (event: IEventSecureInput) => {
+    console.log('Received change event: ', event);
+  };
+  const handleOnBlur = (event: IEventSecureInput) => {
+    console.log('Received blur event: ', event);
+  };
+  const handleOnFocus = (event: IEventSecureInput) => {
+    console.log('Received focus event: ', event);
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />
@@ -129,27 +141,47 @@ export default function LitePaymentScreen() {
         </Text>
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
-            <CardHolderInput />
+            <CardHolderInput
+              onFocus={handleOnFocus}
+              onBlur={handleOnBlur}
+              onChange={handleOnChange}
+            />
           </View>
         </View>
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
-            <CardNumberInput />
+            <CardNumberInput
+              onFocus={handleOnFocus}
+              onBlur={handleOnBlur}
+              onChange={handleOnChange}
+            />
           </View>
         </View>
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
-            <CardExpirationMonthInput />
+            <CardExpirationMonthInput
+              onFocus={handleOnFocus}
+              onBlur={handleOnBlur}
+              onChange={handleOnChange}
+            />
           </View>
         </View>
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
-            <CardExpirationYearInput />
+            <CardExpirationYearInput
+              onFocus={handleOnFocus}
+              onBlur={handleOnBlur}
+              onChange={handleOnChange}
+            />
           </View>
         </View>
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
-            <CardCVVInput />
+            <CardCVVInput
+              onFocus={handleOnFocus}
+              onBlur={handleOnBlur}
+              onChange={handleOnChange}
+            />
           </View>
         </View>
         <TouchableOpacity

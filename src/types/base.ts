@@ -1,4 +1,5 @@
 import type {
+  ICardFormEvents,
   IEnrollment,
   IEnrollmentOptions,
   IEnrollmentState,
@@ -74,3 +75,5 @@ export type SDKStateInstance<T extends SDKType> = T extends SDKType.INLINE
     : T extends SDKType.ENROLLMENT
       ? IEnrollmentState
       : never;
+
+export interface IEvents extends ICardFormEvents {}

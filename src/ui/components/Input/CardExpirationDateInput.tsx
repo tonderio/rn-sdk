@@ -1,6 +1,5 @@
 // @ts-nocheck
 import React from 'react';
-import type { IElementStyle } from '../../../types';
 import {
   DEFAULT_SKYFLOW_lABELS,
   DEFAULT_SKYFLOW_PLACEHOLDERS,
@@ -14,18 +13,14 @@ import {
 import { DEFAULT_INPUT_CONTAINER_STYLES } from '../../styles/payment';
 import { CardExpirationMonthInput } from './CardExpirationMonthInput';
 import { CardExpirationYearInput } from './CardExpirationYearInput';
+import type { InputExpiryDateProps } from '../../../types';
 
-export interface InputExpiryDateProps {
-  label?: string;
-  yearPlaceholder?: string;
-  monthPlaceholder?: string;
-  style?: IElementStyle;
-}
 export const CardExpirationDateInput: React.FC<InputExpiryDateProps> = ({
   yearPlaceholder = DEFAULT_SKYFLOW_PLACEHOLDERS.expiryYearPlaceholder,
   monthPlaceholder = DEFAULT_SKYFLOW_PLACEHOLDERS.expiryMonthPlaceholder,
   label = DEFAULT_SKYFLOW_lABELS.expiryDateLabel,
   style,
+  events,
 }) => {
   return (
     <View style={styles.container}>
@@ -55,6 +50,9 @@ export const CardExpirationDateInput: React.FC<InputExpiryDateProps> = ({
               },
             } as StyleProp<TextStyle>),
           }}
+          onBlur={events?.monthEvents?.onBlur}
+          onChange={events?.monthEvents?.onChange}
+          onFocus={events?.monthEvents?.onFocus}
         />
         <CardExpirationYearInput
           label={''}
@@ -73,6 +71,9 @@ export const CardExpirationDateInput: React.FC<InputExpiryDateProps> = ({
               },
             } as StyleProp<TextStyle>),
           }}
+          onBlur={events?.yearEvents?.onBlur}
+          onChange={events?.yearEvents?.onChange}
+          onFocus={events?.yearEvents?.onFocus}
         />
       </View>
     </View>

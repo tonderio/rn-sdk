@@ -11,6 +11,7 @@ import type {
   IBaseProcessPaymentRequest,
   IBaseCallback,
   IBaseResponse,
+  IEvents,
 } from '.';
 import { SDKType } from './base';
 import TonderError from '../shared/utils/errors';
@@ -19,6 +20,7 @@ export interface IInlineCheckoutOptions extends IBaseCreateOptions {
   paymentData: IBaseProcessPaymentRequest;
   customization?: IInlineCustomizationOptions;
   callbacks?: IInlineCallbacks;
+  events?: IEvents;
   returnURL?: string;
 }
 
@@ -30,6 +32,7 @@ export interface IInlineCheckoutState
   };
   customization?: IInlineCustomizationOptions;
   callbacks?: IInlineCallbacks;
+  events?: IEvents;
   message: string;
   customerCards: ICustomerCardsResponse;
   payment_methods: IPaymentMethod[];

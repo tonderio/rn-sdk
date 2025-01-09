@@ -16,6 +16,7 @@ Tonder React Native SDK helps integrate Tonder's payment services into your Reac
 - [Configuration](#configuration)
 - [Components](#components)
 - [API Reference](#api-reference)
+- [Events](#events)
 - [Styling](#styling)
   - [Inline and Enrollment Styling](#inline--enrollment-styling)
   - [Lite Styling](#lite-styling)
@@ -45,6 +46,7 @@ The SDK supports three integration types:
   - Multiple payment methods support
   - Built-in error handling and validation
   - Customizable styling and layout
+  - Input field event handling (onChange, onFocus, onBlur)
 
 - `SDKType.LITE`: Individual components for custom UI implementations
   - Secure input components for custom payment forms
@@ -54,6 +56,7 @@ The SDK supports three integration types:
   - Card deletion capabilities
   - Manual payment flow control
   - Flexible UI customization
+  - Input field event handling (onChange, onFocus, onBlur)
   - Direct access to all SDK features:
     - Payment processing
     - Card saving
@@ -65,6 +68,7 @@ The SDK supports three integration types:
   - Card tokenization
   - Card validation
   - Secure storage
+  - Input field event handling (onChange, onFocus, onBlur)
 
 Each type can be specified when initializing the SDK through the TonderProvider:
 
@@ -470,12 +474,13 @@ interface ISDKBaseConfig {
 ### Inline Options
 Provide this information when calling the create function.
 
-| Option        | Type                        | Required | Description                                          |
-|---------------|-----------------------------|----------|------------------------------------------------------|
-| paymentData   | IBaseProcessPaymentRequest  | Yes      | Payment information including customer and cart data |
-| customization | IInlineCustomizationOptions | No       | UI customization options                             |
-| callbacks     | IInlineCallbacks            | No       | Payment process callback functions                   |
-| returnURL     | string                      | No       | URL for 3D Secure redirect completion                |
+| Option        | Type                        | Required | Description                                                           |
+|---------------|-----------------------------|----------|-----------------------------------------------------------------------|
+| paymentData   | IBaseProcessPaymentRequest  | Yes      | Payment information including customer and cart data                  |
+| customization | IInlineCustomizationOptions | No       | UI customization options                                              |
+| callbacks     | IInlineCallbacks            | No       | Payment process callback functions                                    |
+| events        | IEvents                     | No       | Event handlers for card form input fields (onChange, onFocus, onBlur) |
+| returnURL     | string                      | No       | URL for 3D Secure redirect completion                                 |
 
 <details>
 <summary>View IInlineCheckoutOptions Interface</summary>
@@ -485,6 +490,7 @@ interface IInlineCheckoutOptions extends IBaseCreateOptions {
   paymentData: IBaseProcessPaymentRequest;
   customization?: IInlineCustomizationOptions;
   callbacks?: IInlineCallbacks;
+  events?: IEvents;
   returnURL?: string;
 }
 ```
@@ -517,11 +523,12 @@ interface ILiteCheckoutOptions extends IBaseCreateOptions {
 ### Enrollment Options
 Provide this information when calling the create function.
 
-| Option        | Type                            | Required | Description                           |
-|---------------|---------------------------------|----------|---------------------------------------|
-| customer      | ICustomer                       | Yes      | Customer information                  |
-| customization | IEnrollmentCustomizationOptions | No       | UI customization options              |
-| callbacks     | IEnrollmentCallbacks            | No       | Enrollment process callback functions |
+| Option        | Type                            | Required | Description                                                           |
+|---------------|---------------------------------|----------|-----------------------------------------------------------------------|
+| customer      | ICustomer                       | Yes      | Customer information                                                  |
+| customization | IEnrollmentCustomizationOptions | No       | UI customization options                                              |
+| events        | IEvents                         | No       | Event handlers for card form input fields (onChange, onFocus, onBlur) |
+| callbacks     | IEnrollmentCallbacks            | No       | Enrollment process callback functions                                 |
 
 <details>
 <summary>View IInlineCheckoutOptions Interface</summary>
@@ -531,6 +538,7 @@ export interface IEnrollmentOptions extends IBaseCreateOptions {
   customer?: ICustomer;
   customization?: IEnrollmentCustomizationOptions;
   callbacks?: IEnrollmentCallbacks;
+  events?: IEvents;
 }
 ```
 </details>
@@ -595,6 +603,8 @@ export interface IEnrollmentCallbacks {
 }
 ```
 </details>
+
+
 
 ### Payment Data Structure
 
@@ -1066,7 +1076,133 @@ export default function EnrollmentButtonScreen() {
 ```
 
 
-### Styling
+
+## Events
+The SDK provides event handling capabilities for card form input fields, supporting both Full/Enrollment SDK and Lite SDK implementations.
+
+
+> **Note:** Values of TonderInputs will be returned in element state object only in Develop environment, but in case of CARD_NUMBER type element when the environment is production for all the card types except AMEX, it will return first eight digits, for AMEX it will return first six digits and rest all digits in masked format.
+
+### Event Types
+Each event object supports:
+- `onChange`: Called when input value changes
+- `onFocus`: Called when input receives focus
+- `onBlur`: Called when input loses focus
+<details>
+<summary>View Interface</summary>
+
+```typescript
+export interface IEvents {
+  onChange?: (event: IEventSecureInput) => void;
+  onFocus?: (event: IEventSecureInput) => void;
+  onBlur?: (event: IEventSecureInput) => void;
+}
+```
+</details>
+
+### Input event properties
+
+| Property    | Type    | Description                                                                                                 |
+|-------------|---------|-------------------------------------------------------------------------------------------------------------|
+| elementType | string  | Type of input element (e.g. 'CARDHOLDER_NAME', 'CARD_NUMBER', 'EXPIRATION_YEAR', 'EXPIRATION_MONTH', 'CVV') |
+| isEmpty     | boolean | Whether the input field has a value                                                                         |
+| isFocused   | boolean | Whether the input field currently has focus                                                                 |
+| isValid     | boolean | Whether the input value passes validation rules                                                             |
+| value       | string  | Current value of the input field                                                                            |
+
+<details>
+<summary>View Interface</summary>
+
+```typescript
+export interface IEventSecureInput {
+  elementType: string;
+  isEmpty: boolean;
+  isFocused: boolean;
+  isValid: boolean;
+  value: string;
+}
+```
+</details>
+
+
+### Full/Enrollment SDK Events
+Events are configured during SDK initialization.
+
+#### Available Events
+| Event Object     | Description                       |
+|------------------|-----------------------------------|
+| cardHolderEvents | Events for cardholder name input  |
+| cardNumberEvents | Events for card number input      |
+| cvvEvents        | Events for CVV input              |
+| monthEvents      | Events for expiration month input |
+| yearEvents       | Events for expiration year input  |
+
+<details>
+<summary>View Interface</summary>
+
+```typescript
+export interface IEvents {
+  cardHolderEvents?: IEvents;
+  cardNumberEvents?: IEvents;
+  cvvEvents?: IEvents;
+  monthEvents?: IEvents;
+  yearEvents?: IEvents;
+}
+```
+</details>
+
+#### Example
+```typescript
+const { create } = useTonder<SDKType.INLINE>();
+
+const { error } = await create({
+  secureToken: 'your-secure-token',
+  paymentData: { ...paymentData },
+  events: {
+    cardHolderEvents: {
+      onChange: (event) => console.log('Card holder changed:', event),
+      onFocus: (event) => console.log('Card holder focused:', event),
+      onBlur: (event) => console.log('Card holder blurred:', event)
+    },
+    cardNumberEvents: {
+      onChange: (event) => console.log('Card number changed:', event)
+    }
+    // ... other input events
+  }
+});
+```
+
+### Lite SDK Events
+For Lite SDK implementations, events are passed directly to individual input components.
+
+<details>
+<summary>View Interface</summary>
+
+```typescript
+export interface InputProps extends IEvents {
+  label?: string;
+  placeholder?: string;
+  style?: IElementStyle;
+}
+```
+</details>
+
+#### Example
+```javascript
+  <CardHolderInput
+    onChange={(event) => console.log('Card holder changed:', event)}
+    onFocus={(event) => console.log('Card holder focused:', event)}
+    onBlur={(event) => console.log('Card holder blurred:', event)}
+  />
+
+  <CardNumberInput
+    onChange={(event) => console.log('Card number changed:', event)}
+  />
+```
+
+
+
+## Styling
 
 The SDK provides flexible styling options to customize the appearance of the components.
 

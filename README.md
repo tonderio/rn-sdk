@@ -77,7 +77,7 @@ Each type can be specified when initializing the SDK through the TonderProvider:
 <TonderProvider
   config={{
     type: SDKType.INLINE,
-    mode: 'development',
+    mode: Environment.stage,
     apiKey: 'your-api-key',
   }}
 >
@@ -88,7 +88,7 @@ Each type can be specified when initializing the SDK through the TonderProvider:
 <TonderProvider
   config={{
     type: SDKType.LITE,
-    mode: 'development',
+    mode: Environment.stage,
     apiKey: 'your-api-key',
   }}
 >
@@ -99,7 +99,7 @@ Each type can be specified when initializing the SDK through the TonderProvider:
 <TonderProvider
   config={{
     type: SDKType.ENROLLMENT,
-    mode: 'development',
+    mode: Environment.stage,
     apiKey: 'your-api-key',
   }}
 >
@@ -142,14 +142,14 @@ const getSecureToken = async (apiSecretKey: string) => {
 First, wrap your application or payment screen with the `TonderProvider`:
 
 ```tsx
-import { TonderProvider, SDKType } from '@tonder.io/rn-sdk';
+import { TonderProvider, SDKType, Environment } from '@tonder.io/rn-sdk';
 
 function App() {
   return (
     <TonderProvider
       config={{
         type: SDKType.INLINE,  // or SDKType.LITE or SDKType.ENROLLMENT
-        mode: 'development', // or production
+        mode: Environment.stage, // or production
         apiKey: 'your-api-key',
       }}
     >
@@ -320,6 +320,21 @@ Before create the mobile SDK, your checkout page should:
 - Obtain the security token for card functionalities (save, delete, list).
 - Collect any required customer information
 
+First, wrap your application or payment screen with the `TonderProvider`:
+
+```tsx
+
+<TonderProvider
+  config={{
+    type: SDKType.ENROLLMENT,
+    mode: Environment.stage, // or production
+    apiKey: 'your-api-key',
+  }}
+>
+  <YourApp />
+</TonderProvider>
+  ```
+
 ```tsx
 import {
   TonderEnrollment,
@@ -375,6 +390,22 @@ export default function EnrollmentScreen() {
 For saving cards with individual components, before create the mobile SDK, your checkout page should:
 - Obtain the security token for card functionalities (save, delete, list).
 - Collect any required customer information:
+
+First, wrap your application or payment screen with the `TonderProvider`:
+
+```tsx
+import { TonderProvider, SDKType, Environment } from '@tonder.io/rn-sdk';
+<TonderProvider
+  config={{
+    type: SDKType.ENROLLMENT,
+    mode: Environment.stage, // or production
+    apiKey: 'your-api-key',
+  }}
+>
+  <YourApp />
+</TonderProvider>
+```
+
 
 ```tsx
 import {
@@ -463,7 +494,7 @@ export default function EnrollmentLiteScreen() {
 
 ```typescript
 interface ISDKBaseConfig {
-  mode: 'development' | 'production' | 'sandbox';
+  mode: 'development' | 'production' | 'sandbox'; // Environment.stage
   apiKey: string;
   type: SDKType;
   returnURL?: string;

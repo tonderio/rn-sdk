@@ -41,11 +41,6 @@ const uiWrapper = (tonder: Tonder): IUIWrapper => ({
         data: { response: MESSAGES_EN.REMOVE_CARD },
       });
     } catch (error) {
-      console.log(
-        '[uiWrapper | removeCustomerCard | ERROR',
-        error,
-        error?.details
-      );
       await executeCallback({
         callbacks,
         callback: 'onFinishDeleteCard',

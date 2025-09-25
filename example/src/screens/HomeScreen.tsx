@@ -94,6 +94,19 @@ export default function HomeScreen() {
           </View>
         </>
       </Collapse>
+      <Collapse title="Lite Enrollment">
+        <>
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Lite Enrollment"
+              onPress={() => {
+                navigation.navigate('LiteEnrollmentScreen');
+              }}
+            />
+          </View>
+         
+        </>
+      </Collapse>
     </ScrollView>
   );
 }

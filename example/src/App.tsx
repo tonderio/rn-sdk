@@ -12,6 +12,8 @@ import FullEnrollmentButtonScreen from './FullEnrollmentButtonScreen';
 import FullPaymentButtonScreen from './FullPaymentButtonScreen';
 import LitePaymentCustomizationScreen from './LitePaymentCustomizationScreen';
 import LitePaymentFullScreen from './LitePaymentFullScreen';
+import LiteEnrollmentScreen from './LiteEnrollmentScreen';
+
 import { BusinessConfig } from './business';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -119,6 +121,20 @@ function FullEnrollBTNScreen({}) {
   );
 }
 
+function LiteEnrollScreen({}) {
+  return (
+    <TonderProvider
+      config={{
+        type: SDKType.ENROLLMENT,
+        mode: mode,
+        apiKey: apiPublicKey,
+      }}
+    >
+      <LiteEnrollmentScreen />
+    </TonderProvider>
+  );
+}
+
 function LitePayScreen() {
   return (
     <TonderProvider
@@ -194,6 +210,10 @@ export default function App() {
             name="FullEnrollmentCustomizationScreen"
             component={FullEnrollCustomScreen}
           />
+           <Stack.Screen
+            name="LiteEnrollmentScreen"
+            component={LiteEnrollScreen}
+          />
 
           <Stack.Screen name="LitePaymentScreen" component={LitePayScreen} />
           <Stack.Screen
@@ -204,6 +224,7 @@ export default function App() {
             name="LitePaymentFullScreen"
             component={LitePayFullScreen}
           />
+
         </Stack.Navigator>
       </NavigationContainer>
     </>

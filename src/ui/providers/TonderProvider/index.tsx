@@ -75,7 +75,6 @@ const TonderProvider: React.FC<React.PropsWithChildren<ITonderProvider>> = <
     });
 
     return () => {
-      console.log('unsubs');
       unsubscribeShow();
       unsubscribeHide();
     };
@@ -90,7 +89,6 @@ const TonderProvider: React.FC<React.PropsWithChildren<ITonderProvider>> = <
     [sdk, state, uiSDKWrapper]
   );
 
-  console.log('threeDSConfig.url: ', threeDSConfig.url);
   return (
     <tonderContext.Provider value={contextValue}>
       <SkyflowProvider config={skyflowConfig}>

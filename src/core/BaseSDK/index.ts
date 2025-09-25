@@ -49,7 +49,6 @@ class BaseSDK {
         await this.setState({ customerData });
         return customerData;
       }
-      console.log('Customer data was not provided, skipping get/register.');
       return null;
     } catch (error) {
       if (error instanceof TonderError) {

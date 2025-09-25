@@ -6,7 +6,7 @@ import { Env, LogLevel } from 'skf-rnad';
 import { Environment } from '@tonder.io/rn-sdk';
 
 export class SkyflowService {
-  private readonly BASE_PATH = '/api/v1/vault-token';
+  private readonly BASE_PATH = '/api/v1/vault-token/';
   private readonly http: HttpClient;
 
   constructor(http: HttpClient) {

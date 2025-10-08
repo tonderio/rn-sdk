@@ -523,7 +523,7 @@ import {
 } from '@tonder.io/rn-sdk';
 
 export default function EnrollmentLiteScreen() {
-  const { create, saveCustomerCard, reset } = useTonder<SDKType.ENROLLMENT>();
+  const { create, saveCustomerCard, reset, getCardSummary } = useTonder<SDKType.ENROLLMENT>();
 
   const customerData: ICustomer = {
     email: 'test@example.com',
@@ -554,13 +554,25 @@ export default function EnrollmentLiteScreen() {
         return;
       }
       console.log('Card saved successfully:', response);
-
+      // GET summary card
+      await handleGetSummaryCard(response.skyflow_id);
       // Reset and reinitialize for next use
       reset();
       await initializeEnrollment();
     } catch (e) {
       console.error('Unexpected error:', e);
     }
+  };
+
+  const handleGetSummaryCard = async (id: string) => {
+    const { response, error } = await getCardSummary(id);
+    if (error) {
+      //Manage error
+      Alert.alert('Error', 'Failed to get summary card');
+      console.error('Error get summary card: ', error);
+      return;
+    }
+    console.log('Response get summary: ', response);
   };
 
   return (

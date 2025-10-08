@@ -93,7 +93,6 @@ export default function LiteEnrollmentScreen() {
     console.log('Response save: ', response);
     // GET summary card
     await handleGetSummaryCard(response.skyflow_id);
-    // Get card data
     // Reset the state and regenerate the SDK to use it again.
     reset();
     await initialize();

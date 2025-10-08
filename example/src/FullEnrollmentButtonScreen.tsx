@@ -25,7 +25,8 @@ export default function FullEnrollmentButtonScreen() {
     firstName: 'david',
     lastName: 'her',
   };
-  const { create, saveCustomerCard, reset } = useTonder<SDKType.ENROLLMENT>();
+  const { create, saveCustomerCard, reset, getCardSummary } =
+    useTonder<SDKType.ENROLLMENT>();
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
@@ -75,10 +76,23 @@ export default function FullEnrollmentButtonScreen() {
     }
     Alert.alert('Success', 'Card saved successfully!');
     console.log('Response save: ', response);
+    await handleGetSummaryCard(response.skyflow_id);
     // Reset the state and regenerate the SDK to use it again.
     reset();
     await initialize();
   };
+
+  const handleGetSummaryCard = async (id: string) => {
+    const { response, error } = await getCardSummary(id);
+    if (error) {
+      //Manage error
+      Alert.alert('Error', 'Failed to get summary card');
+      console.error('Error get summary card: ', error);
+      return;
+    }
+    console.log('Response get summary: ', response);
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />

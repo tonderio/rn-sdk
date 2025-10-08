@@ -1,4 +1,5 @@
 import type {
+  ICardsSummaryResponse,
   ICustomerCardsResponse,
   ISaveCardResponse,
   ISaveCardSkyflowRequest,
@@ -94,6 +95,33 @@ export class CardService {
       //   code: ErrorKeyEnum.REMOVE_CARD_ERROR,
       //   details: error,
       // });
+    }
+  }
+
+  /**
+   * get a card summary
+   * @throws {TonderError} If the request fails
+   */
+  async getCardSummary(
+    customerToken: string,
+    secureToken: string,
+    skyflowId: string,
+    businessId: string | number
+  ): Promise<ICardsSummaryResponse> {
+    this.validateSecureToken(secureToken);
+
+    try {
+      return await this.http.get(
+        `${this.BASE_PATH}/${businessId}/cards/${skyflowId}/summary`,
+        {
+          headers: this.buildAuthHeaders(secureToken, customerToken),
+        }
+      );
+    } catch (error) {
+      throw new TonderError({
+        code: ErrorKeyEnum.SAVE_CARD_ERROR,
+        details: error,
+      });
     }
   }
 

@@ -1163,6 +1163,49 @@ The ENROLLMENT integration provides methods for handling full enrollment with bu
 - saveCustomerCard: Tokenizes and saves the current card information.
 - getCardSummary: Retrieves detailed information about a saved card using its Skyflow ID.
 
+  <details>
+  <summary>Input Interface</summary>
+
+  | Parameter | Type   | Description                                    |
+  |-----------|--------|------------------------------------------------|
+  | skyflowId | string | The Skyflow ID of the card to retrieve        |
+
+  </details>
+
+  <details>
+  <summary>Response Interface</summary>
+
+  **IBaseResponse<ICardsSummaryResponse>**
+
+  The response follows the base response pattern:
+
+  ```typescript
+  export type IBaseResponse<T> =
+    | { response: ICardsSummaryResponse; error?: TonderError }
+    | { response?: never; error: TonderError };
+  ```
+
+  **Success Response (ICardsSummaryResponse)**
+
+  | Property | Type   | Description                                    |
+  |----------|--------|------------------------------------------------|
+  | user_id  | number | The ID of the user who owns the card           |
+  | card     | object | Object containing the card fields              |
+
+  **Card Fields (ICardSkyflowFields)**
+
+  | Property          | Type   | Description                                |
+  |-------------------|--------|--------------------------------------------|
+  | card_number       | string | The masked card number            |
+  | expiration_month  | string | The expiration month of the card           |
+  | expiration_year   | string | The expiration year of the card            |
+  | skyflow_id        | string | The unique Skyflow identifier for the card |
+  | card_scheme       | string | The card brand (e.g., Visa, Mastercard)    |
+  | cardholder_name   | string | The name of the cardholder                 |
+
+  </details>
+
+
 > **Note:** The saveCustomerCard It is only necessary when you want to control the enrollment button on your own.
 
 > **Note:** For card methods, it is necessary to obtain and use your secure token when calling the create function.

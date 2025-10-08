@@ -1,5 +1,6 @@
 import type {
   IBaseResponse,
+  ICardsSummaryResponse,
   IEnrollment,
   ISaveCardResponse,
   SDKOptions,
@@ -35,7 +36,9 @@ export class EnrollmentContainer implements IEnrollment {
     return await this.#baseSDK.create(data);
   };
 
-  public saveCustomerCard = async(): Promise<IBaseResponse<ISaveCardResponse>> => {
+  public saveCustomerCard = async (): Promise<
+    IBaseResponse<ISaveCardResponse>
+  > => {
     const currentCallbacks = this.#baseSDK.getState().callbacks;
     try {
       await this.#baseSDK.setState({
@@ -97,9 +100,20 @@ export class EnrollmentContainer implements IEnrollment {
       });
       return { error: err };
     }
-  }
+  };
 
   reset = (): void => {
     this.#tonderClient.reset();
+  };
+
+  public getCardSummary = async (
+    id: string
+  ): Promise<IBaseResponse<ICardsSummaryResponse>> => {
+    try {
+      const response = await this.#baseSDK.getCardSummary(id);
+      return { response };
+    } catch (error) {
+      return { error: error as TonderError };
+    }
   };
 }

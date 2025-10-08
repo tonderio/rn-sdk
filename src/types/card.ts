@@ -28,6 +28,13 @@ export interface ICustomerCardsResponse {
   cards: ICard[];
 }
 
+export interface ICardsSummaryResponse {
+  user_id: number;
+  card: {
+    fields: ICardSkyflowFields;
+  };
+}
+
 export interface ISaveCardResponse {
   skyflow_id: string;
   user_id: number;

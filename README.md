@@ -62,11 +62,13 @@ The SDK supports three integration types:
     - Card saving
     - Card listing
     - Card deletion
+    - Card summary
     - Payment methods retrieval
 
 - `SDKType.ENROLLMENT`: Card saving functionality
   - Card tokenization
   - Card validation
+  - Card summary
   - Secure storage
   - Input field event handling (onChange, onFocus, onBlur)
 
@@ -214,7 +216,7 @@ export default function FullPaymentScreen() {
   };
 
   const callbackFinish = async (response) => {
-    console.log('FINISH PAYMENT ===== ', response);
+    console.log('Callback finish payment', response);
 
     // Reset the state and regenerate the SDK to use it again.
     reset();
@@ -269,7 +271,7 @@ export default function LitePaymentScreen() {
     }
   };
 
-  useEffect(() => {
+    useEffect(() => {
     initializePayment();
   }, []);
 
@@ -340,7 +342,9 @@ import {
   TonderEnrollment,
   useTonder,
   SDKType,
-  ICustomer
+  ICustomer,
+  type IBaseResponse,
+  type ISaveCardResponse,
 } from '@tonder.io/rn-sdk';
 
 export default function EnrollmentScreen() {
@@ -370,16 +374,115 @@ export default function EnrollmentScreen() {
     }
   };
 
-  const handleSaveFinish = async (response) => {
+  const handleSaveFinish = async (response: IBaseResponse<ISaveCardResponse>) => {
+    console.log('Callback finish save card', response);
+
+    if (response.error) {
+      // Manage the error
+      Alert.alert('Error', 'Failed to save card. Please try again.');
+      console.log('Save Card ERROR', response.error);
+      return;
+    }
     console.log('Card saved successfully:', response);
+
+    await handleGetSummaryCard(response.response.skyflow_id);
     // Reset the state and regenerate the SDK to use it again
     reset();
     await initializeEnrollment();
   };
 
+  const handleGetSummaryCard = async (id: string) => {
+    const { response, error } = await getCardSummary(id);
+    if (error) {
+      //Manage error
+      Alert.alert('Error', 'Failed to get summary card');
+      console.error('Error get summary card: ', error);
+      return;
+    }
+    console.log('Response get summary: ', response);
+  };
+
   return (
     <SafeAreaView>
       <TonderEnrollment />
+    </SafeAreaView>
+  );
+}
+```
+
+#### Example with custom button
+```tsx
+import {
+  TonderEnrollment,
+  useTonder,
+  SDKType,
+  ICustomer
+} from '@tonder.io/rn-sdk';
+
+export default function EnrollmentScreen() {
+  const { create, reset, saveCustomerCard, getCardSummary } = useTonder<SDKType.ENROLLMENT>();
+
+  const customerData: ICustomer = {
+    email: 'test@example.com',
+    firstName: 'John',
+    lastName: 'Doe'
+  };
+
+  useEffect(() => {
+    initializeEnrollment();
+  }, []);
+
+  const initializeEnrollment = async () => {
+    const { error } = await create({
+      secureToken: 'your-secure-token',
+      customer: customerData,
+      customization: {
+        saveButton: {
+          show: false, // hidde default button
+        },
+      },
+    });
+
+    if (error) {
+      console.error('Enrollment initialization error:', error);
+    }
+  };
+
+  const handleSaveCard = async () => {
+    const { response, error } = await saveCustomerCard();
+    if (error) {
+      //Manage error
+      console.error('Error saving card: ', error);
+      return;
+    }
+    console.log('Response save card: ', response);
+
+    // Get card summary using the skyflow_id from the save response
+    await handleGetCardSummary(response.skyflow_id);
+    // Reset the state and regenerate the SDK to use it again
+    reset();
+    await initializeEnrollment();
+  };
+
+  const handleGetCardSummary = async (skyflowId: string) => {
+    const { response, error } = await getCardSummary(skyflowId);
+    if (error) {
+      console.error('Error getting card summary:', error);
+      return;
+    }
+    console.log('Card summary:', response);
+    // Response contains: user_id and card details
+  };
+
+  return (
+    <SafeAreaView>
+      <TonderEnrollment />
+      {/*Custom button*/}
+      <TouchableOpacity
+        onPress={handleSaveCard}
+      >
+        <Text>Guardar</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -420,7 +523,7 @@ import {
 } from '@tonder.io/rn-sdk';
 
 export default function EnrollmentLiteScreen() {
-  const { create, saveCustomerCard, reset } = useTonder<SDKType.ENROLLMENT>();
+  const { create, saveCustomerCard, reset, getCardSummary } = useTonder<SDKType.ENROLLMENT>();
 
   const customerData: ICustomer = {
     email: 'test@example.com',
@@ -451,13 +554,25 @@ export default function EnrollmentLiteScreen() {
         return;
       }
       console.log('Card saved successfully:', response);
-
+      // GET summary card
+      await handleGetSummaryCard(response.skyflow_id);
       // Reset and reinitialize for next use
       reset();
       await initializeEnrollment();
     } catch (e) {
       console.error('Unexpected error:', e);
     }
+  };
+
+  const handleGetSummaryCard = async (id: string) => {
+    const { response, error } = await getCardSummary(id);
+    if (error) {
+      //Manage error
+      Alert.alert('Error', 'Failed to get summary card');
+      console.error('Error get summary card: ', error);
+      return;
+    }
+    console.log('Response get summary: ', response);
   };
 
   return (
@@ -708,7 +823,6 @@ interface IBaseProcessPaymentRequest {
       amount_total: number;
       description: string;
       price_unit: number;
-      product_reference: string;
       quantity: number;
       discount?: number;
       taxes?: number;
@@ -738,7 +852,6 @@ interface IProcessPaymentRequest {
       amount_total: number;
       description: string;
       price_unit: number;
-      product_reference: string;
       quantity: number;
       discount?: number;
       taxes?: number;
@@ -1030,6 +1143,7 @@ The LITE integration provides full control over the payment flow with individual
 - payment: Processes a payment using the configured payment data.
 - saveCustomerCard: Tokenizes and saves the current card information.
 - getCustomerCards: Retrieves the list of saved cards for the customer.
+- getCardSummary: Retrieves detailed information about a saved card using its Skyflow ID.
 - getPaymentMethods: Retrieves available payment methods.
 - removeCustomerCard: Deletes a saved card.
 
@@ -1038,7 +1152,7 @@ The LITE integration provides full control over the payment flow with individual
 > **Note:** For card methods, it is necessary to obtain and use your secure token when calling the create function.
 
 ```typescript
-const { create, payment, saveCustomerCard, getCustomerCards,
+const { create, payment, saveCustomerCard, getCustomerCards, getCardSummary,
         removeCustomerCard, getPaymentMethods, reset } = useTonder<SDKType.LITE>();
 ```
 
@@ -1047,66 +1161,58 @@ const { create, payment, saveCustomerCard, getCustomerCards,
 The ENROLLMENT integration provides methods for handling full enrollment with built-in UI components.
 
 - saveCustomerCard: Tokenizes and saves the current card information.
+- getCardSummary: Retrieves detailed information about a saved card using its Skyflow ID.
+
+  <details>
+  <summary>Input Interface</summary>
+
+  | Parameter | Type   | Description                                    |
+  |-----------|--------|------------------------------------------------|
+  | skyflowId | string | The Skyflow ID of the card to retrieve        |
+
+  </details>
+
+  <details>
+  <summary>Response Interface</summary>
+
+  **IBaseResponse<ICardsSummaryResponse>**
+
+  The response follows the base response pattern:
+
+  ```typescript
+  export type IBaseResponse<T> =
+    | { response: ICardsSummaryResponse; error?: TonderError }
+    | { response?: never; error: TonderError };
+  ```
+
+  **Success Response (ICardsSummaryResponse)**
+
+  | Property | Type   | Description                                    |
+  |----------|--------|------------------------------------------------|
+  | user_id  | number | The ID of the user who owns the card           |
+  | card     | object | Object containing the card fields              |
+
+  **Card Fields (ICardSkyflowFields)**
+
+  | Property          | Type   | Description                                |
+  |-------------------|--------|--------------------------------------------|
+  | card_number       | string | The masked card number            |
+  | expiration_month  | string | The expiration month of the card           |
+  | expiration_year   | string | The expiration year of the card            |
+  | skyflow_id        | string | The unique Skyflow identifier for the card |
+  | card_scheme       | string | The card brand (e.g., Visa, Mastercard)    |
+  | cardholder_name   | string | The name of the cardholder                 |
+
+  </details>
+
 
 > **Note:** The saveCustomerCard It is only necessary when you want to control the enrollment button on your own.
 
 > **Note:** For card methods, it is necessary to obtain and use your secure token when calling the create function.
 
 ```typescript
-const { create, saveCustomerCard, reset } = useTonder<SDKType.LITE>();
+const { create, saveCustomerCard, getCardSummary, reset } = useTonder<SDKType.ENROLLMENT>();
 ```
-#### Example with custom button
-```tsx
-
-export default function EnrollmentButtonScreen() {
-  const { create, saveCustomerCard } = useTonder<SDKType.ENROLLMENT>();
-
-  useEffect(() => {
-    createSDK()
-  }, [])
-
-  const createSDK = async (token) => {
-    const { error } = await create({
-      secureToken: token,
-      customer: { ...customerData },
-      customization: {
-        saveButton: {
-          show: false, // hidde default button
-        },
-      },
-    });
-
-    if (error) {
-      // Manage error
-      console.error('Error creating SDK', error);
-    }
-  };
-
-  const handleSaveCard = async () => {
-    const { response, error } = await saveCustomerCard();
-    if (error) {
-      //Manage error
-      console.error('Error save: ', error);
-      return;
-    }
-    console.log('Response save: ', response);
-  };
-
-  return (
-    <SafeAreaView style={styles.safeArea}>
-        <TonderEnrollment />
-        {/*Custom button*/}
-        <TouchableOpacity
-          onPress={handleSaveCard}
-        >
-          <Text>Guardar</Text>
-        </TouchableOpacity>
-    </SafeAreaView>
-  );
-}
-```
-
-
 
 ## Events
 The SDK provides event handling capabilities for card form input fields, supporting both Full/Enrollment SDK and Lite SDK implementations.

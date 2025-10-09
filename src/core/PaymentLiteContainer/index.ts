@@ -4,6 +4,7 @@ import { ErrorKeyEnum } from '../../shared';
 import React from 'react';
 import type {
   IBaseResponse,
+  ICardsSummaryResponse,
   ICustomerCardsResponse,
   ILiteCustomizationOptions,
   IPaymentLiteContainer,
@@ -59,6 +60,7 @@ class PaymentLiteContainer implements IPaymentLiteContainer {
     });
     return await this.#baseSDK.create(data);
   };
+
   public payment = async (
     data?: IProcessPaymentRequest
   ): Promise<IBaseResponse<ITransaction>> => {
@@ -178,6 +180,17 @@ class PaymentLiteContainer implements IPaymentLiteContainer {
 
   reset = (): void => {
     this.#tonderClient.reset();
+  };
+
+  public getCardSummary = async (
+    id: string
+  ): Promise<IBaseResponse<ICardsSummaryResponse>> => {
+    try {
+      const response = await this.#baseSDK.getCardSummary(id);
+      return { response };
+    } catch (error) {
+      return { error: error as TonderError };
+    }
   };
 
   private validateProcessPaymentData(data: IProcessPaymentRequest) {

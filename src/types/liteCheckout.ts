@@ -10,6 +10,7 @@ import type {
   IBaseCallback,
   IInlineCallbacks,
   IBaseResponse,
+  ICardsSummaryResponse,
 } from '.';
 import { SDKType } from './base';
 import TonderError from '../shared/utils/errors';
@@ -104,4 +105,13 @@ export interface IPaymentLiteContainer {
    * @public
    */
   reset(): void;
+
+  /**
+   * Retrieves a summary of the card associated with a customer.
+   * @param {string} id - The unique identifier of the card to retrieve the summary for.
+   * @returns {Promise<IBaseResponse<ICardsSummaryResponse>>} A promise that resolves with the customer's card summary data.
+   *
+   * @public
+   */
+  getCardSummary(id: string): Promise<IBaseResponse<ICardsSummaryResponse>>;
 }

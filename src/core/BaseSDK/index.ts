@@ -1,5 +1,9 @@
 import type Tonder from '../Tonder';
-import type { ICustomer, ICustomerResponse } from '../../types';
+import type {
+  ICardsSummaryResponse,
+  ICustomer,
+  ICustomerResponse,
+} from '../../types';
 import TonderError from '../../shared/utils/errors';
 import { ErrorKeyEnum } from '../../shared';
 import React from 'react';
@@ -66,6 +70,19 @@ class BaseSDK {
     }
     await this.initSkyflow();
   }
+
+  public getCardSummary = async (
+    id: string
+  ): Promise<ICardsSummaryResponse> => {
+    const merchantId = this.tonderClient.getBusinessPK();
+    const secureToken: string = this.tonderClient.getSecureToken();
+    const customer_auth_token: string | undefined =
+      this.tonderClient.getCustomerAuthToken();
+
+    return this.tonderClient
+      .getService()
+      .card.getCardSummary(customer_auth_token, secureToken, id, merchantId);
+  };
 
   private initMercadoPago() {
     const merchantData = this.getState().merchantData;

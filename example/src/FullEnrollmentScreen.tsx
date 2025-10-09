@@ -12,6 +12,8 @@ import {
   TonderEnrollment,
   SDKType,
   type IEventSecureInput,
+  type IBaseResponse,
+  type ISaveCardResponse,
 } from '@tonder.io/rn-sdk';
 import { useEffect } from 'react';
 import { getSecureToken } from './utils/utils';
@@ -26,7 +28,7 @@ export default function FullEnrollmentScreen() {
     lastName: 'her',
   };
 
-  const { create, reset } = useTonder<SDKType.ENROLLMENT>();
+  const { create, reset, getCardSummary } = useTonder<SDKType.ENROLLMENT>();
 
   useEffect(() => {
     initialize();
@@ -70,8 +72,8 @@ export default function FullEnrollmentScreen() {
     }
   };
 
-  const callbackFinish = async (response) => {
-    console.log('FINISH SAVE CARD ===== ', response);
+  const callbackFinish = async (response: IBaseResponse<ISaveCardResponse>) => {
+    console.log('Callback finish save card', response);
 
     if (response.error) {
       // Manage the error
@@ -80,6 +82,7 @@ export default function FullEnrollmentScreen() {
       return;
     }
     Alert.alert('Success', 'Card saved successfully!');
+    await handleGetSummaryCard(response.response.skyflow_id);
     // Reset the state and regenerate the SDK to use it again.
     reset();
     await initialize();
@@ -93,6 +96,17 @@ export default function FullEnrollmentScreen() {
   };
   const handleOnFocus = (event: IEventSecureInput) => {
     console.log('Received focus event: ', event);
+  };
+
+  const handleGetSummaryCard = async (id: string) => {
+    const { response, error } = await getCardSummary(id);
+    if (error) {
+      //Manage error
+      Alert.alert('Error', 'Failed to get summary card');
+      console.error('Error get summary card: ', error);
+      return;
+    }
+    console.log('Response get summary: ', response);
   };
 
   return (

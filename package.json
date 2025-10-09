@@ -1,6 +1,6 @@
 {
   "name": "@tonder.io/rn-sdk",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Tonder react native sdk",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -82,8 +82,8 @@
     "react": "18.2.0",
     "react-native": "0.74.0",
     "react-native-builder-bob": "^0.33.1",
-    "react-native-svg": "^13.9.0",
-    "react-native-webview": "^13.2.0",
+    "react-native-svg": "13.9.0",
+    "react-native-webview": "13.2.0",
     "release-it": "^17.10.0",
     "turbo": "^1.10.7",
     "typescript": "^5.2.2"
@@ -94,8 +94,8 @@
   "peerDependencies": {
     "react": ">=18.2.0",
     "react-native": ">=0.74.0",
-    "react-native-svg": "^13.9.0",
-    "react-native-webview": "^13.2.0"
+    "react-native-svg": ">=13.9.0",
+    "react-native-webview": ">=13.2.0"
   },
   "workspaces": [
     "example"

@@ -3,14 +3,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Tonder from '../../../core/Tonder';
 import type { ISDKBaseConfig, SDKInstance } from '../../../types';
 import { SDKType } from '../../../types';
-import { SkyflowProvider } from 'skf-rnad';
-import SkyflowContainerWrapper from '../SkyflowContainerWrapper';
-import { ThreeDSWebView } from '../../components/WebView/ThreeDSWebView';
 import { EnrollmentContainer } from '../../../core/EnrollmentContainer';
 import PaymentLiteContainer from '../../../core/PaymentLiteContainer';
 import PaymentInlineContainer from '../../../core/PaymentInlineContainer';
 import uiWrapper from './uiWrapper';
 import { tonderContext } from './context';
+import TonderProviderWrapper from './TonderProviderWrapper';
 
 export interface ITonderProvider {
   config: ISDKBaseConfig;
@@ -22,7 +20,6 @@ const TonderProvider: React.FC<React.PropsWithChildren<ITonderProvider>> = <
   children,
   config,
 }) => {
-  const [skyflowConfig, setSkyflowConfig] = useState<any | null>(null);
   const [state, setState] = useState<Readonly<any>>(() => {});
   const [threeDSConfig, setThreeDSConfig] = useState<{
     url?: string;
@@ -33,22 +30,13 @@ const TonderProvider: React.FC<React.PropsWithChildren<ITonderProvider>> = <
   const tonder = useMemo(() => new Tonder(config), [config]);
   const sdk: SDKInstance<T> = useMemo(() => {
     if (config.type === SDKType.ENROLLMENT) {
-      return new EnrollmentContainer(
-        tonder,
-        setSkyflowConfig
-      ) as SDKInstance<T>;
+      return new EnrollmentContainer(tonder) as SDKInstance<T>;
     }
     if (config.type === SDKType.LITE) {
-      return new PaymentLiteContainer(
-        tonder,
-        setSkyflowConfig
-      ) as SDKInstance<T>;
+      return new PaymentLiteContainer(tonder) as SDKInstance<T>;
     }
-    return new PaymentInlineContainer(
-      tonder,
-      setSkyflowConfig
-    ) as SDKInstance<T>;
-  }, [tonder, setSkyflowConfig]);
+    return new PaymentInlineContainer(tonder) as SDKInstance<T>;
+  }, [config.type, tonder]);
   const uiSDKWrapper = useMemo(() => uiWrapper(tonder), [tonder]);
 
   useEffect(() => {
@@ -91,20 +79,9 @@ const TonderProvider: React.FC<React.PropsWithChildren<ITonderProvider>> = <
 
   return (
     <tonderContext.Provider value={contextValue}>
-      <SkyflowProvider config={skyflowConfig}>
-        <SkyflowContainerWrapper contextValue={contextValue}>
-          {!!threeDSConfig.url && (
-            <ThreeDSWebView
-              url={threeDSConfig.url}
-              onComplete={() => {
-                threeDSConfig.onComplete?.();
-              }}
-              returnURL={threeDSConfig.returnURL!}
-            />
-          )}
-          {children}
-        </SkyflowContainerWrapper>
-      </SkyflowProvider>
+      <TonderProviderWrapper threeDSConfig={threeDSConfig}>
+        {children}
+      </TonderProviderWrapper>
     </tonderContext.Provider>
   );
 };

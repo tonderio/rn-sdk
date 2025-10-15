@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import type { IPaymentMethod, StylesSelectVariant } from '../../../types';
 import { getPaymentMethodDetails } from '../../../shared/catalog/paymentMethodsCatalog';
 import { RadioButton } from '../RadioButton';
@@ -25,7 +32,12 @@ const PaymentMethodsList: React.FC<PaymentMethodsListProps> = ({
       {methods.map((method) => {
         const details = getPaymentMethodDetails(method.payment_method);
         return (
-          <View key={method.id} style={styles.methodItem}>
+          <TouchableOpacity
+            key={method.id}
+            style={styles.methodItem}
+            onPress={() => onMethodSelect(method.payment_method)}
+            activeOpacity={0.7}
+          >
             <RadioButton
               style={{
                 base: style?.radioBase,
@@ -52,7 +64,7 @@ const PaymentMethodsList: React.FC<PaymentMethodsListProps> = ({
             >
               {details.label}
             </Text>
-          </View>
+          </TouchableOpacity>
         );
       })}
     </ScrollView>

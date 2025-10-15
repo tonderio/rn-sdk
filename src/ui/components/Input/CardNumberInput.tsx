@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useState } from 'react';
 import type { InputProps } from '../../../types';
-import { CardNumberElement } from 'skf-rnad';
+import { CardNumberElement } from 'skyflow-react-native';
 import {
   getErrorField,
   regexMatchRule,
@@ -17,6 +17,7 @@ import {
   SKYFLOW_HIDDEN_ERROR_TEXT_STYLES,
 } from '../../styles/skyflow';
 import useTonderContext from '../../providers/TonderProvider/hook';
+import SkyflowContainerWrapper from '../../providers/SkyflowContainerWrapper';
 
 export const CardNumberInput: React.FC<InputProps> = ({
   placeholder = DEFAULT_SKYFLOW_PLACEHOLDERS.cardPlaceholder,
@@ -31,6 +32,7 @@ export const CardNumberInput: React.FC<InputProps> = ({
 
   return (
     <>
+      <SkyflowContainerWrapper />
       {state?.skyflowContainer && state?.isCreated && !state?.isCreating && (
         <View
           style={{
@@ -44,6 +46,9 @@ export const CardNumberInput: React.FC<InputProps> = ({
             container={state.skyflowContainer}
             table="cards"
             column="card_number"
+            options={{
+              enableCardIcon: false,
+            }}
             placeholder={placeholder}
             label={label}
             validations={[regexMatchRule]}

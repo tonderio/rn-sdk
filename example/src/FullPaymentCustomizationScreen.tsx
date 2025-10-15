@@ -245,25 +245,53 @@ export default function FullPaymentCustomizationScreen() {
   };
 
   const callbackFinish = async (response) => {
-    if (
-      response.error ||
-      !['Success', 'Authorized'].includes(
-        response?.response?.transaction_status
-      )
-    ) {
+    if (response.error) {
       // Manage error
       Alert.alert('Error', 'Failed to process payment. Please try again.');
       console.log('Error payment: ', response);
       return;
     }
-    console.log('Success payment', response);
-    Alert.alert(
-      response?.response?.transaction_status || 'Success',
-      'Payment process successfully!'
-    );
+    console.log('Payment response: ', response);
+
+    // Handle transaction status
+    handleTransactionStatus(response?.response?.transaction_status);
+
     // Reset the state and regenerate the SDK to use it again.
     reset();
     await initialize();
+  };
+
+  // Handle different transaction statuses
+  // Customize these messages based on your business logic
+  const handleTransactionStatus = (status: string | undefined) => {
+    switch (status) {
+      case 'Success':
+      case 'Authorized':
+        Alert.alert(
+          'Payment Successful',
+          'Your payment has been processed successfully!'
+        );
+
+        break;
+
+      case 'Pending':
+        Alert.alert(
+          'Payment Pending',
+          'Your payment is being processed. You will be notified once completed.'
+        );
+        break;
+
+      case 'Declined':
+        Alert.alert(
+          'Payment Declined',
+          'Your payment was declined. Please try again or use a different payment method.'
+        );
+        break;
+
+      default:
+        Alert.alert(status || 'Unknown Status', 'Error processing payment');
+        break;
+    }
   };
 
   return (

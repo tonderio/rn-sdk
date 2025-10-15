@@ -96,13 +96,14 @@ export class ThreeDSHandler implements IThreeDSHandler {
         returnURL: this.returnURL,
         onComplete: async () => {
           const response = await this.verifyTransaction();
-          const transaction_status = response?.transaction_status || '';
+
           if (
             response?.decline?.error_type === 'Hard' ||
-            response?.checkout?.is_route_finished ||
-            ['Success', 'Authorized'].includes(transaction_status) ||
-            (['Pending'].includes(transaction_status) &&
-              !!response?.payment_method?.is_apm)
+            !!response?.is_route_finished ||
+            !!response?.checkout?.is_route_finished ||
+            ['Pending', 'Success', 'Authorized'].includes(
+              response?.transaction_status
+            )
           ) {
             this.emit3DS('hide3DS', {});
             await this.removeVerifyTransactionUrl();

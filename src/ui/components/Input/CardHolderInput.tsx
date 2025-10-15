@@ -9,7 +9,7 @@ import {
   DEFAULT_SKYFLOW_PLACEHOLDERS,
 } from '../../../shared/constants/skyflow';
 import { Text, View } from 'react-native';
-import { CardHolderNameElement } from 'skf-rnad';
+import { CardHolderNameElement } from 'skyflow-react-native';
 import {
   DEFAULT_SKYFLOW_ERROR_TEXT_STYLES,
   DEFAULT_SKYFLOW_INPUT_STYLES,
@@ -18,6 +18,7 @@ import {
 } from '../../styles/skyflow';
 import { DEFAULT_INPUT_CONTAINER_STYLES } from '../../styles/payment';
 import useTonderContext from '../../providers/TonderProvider/hook';
+import SkyflowContainerWrapper from '../../providers/SkyflowContainerWrapper';
 
 export const CardHolderInput: React.FC<InputProps> = ({
   placeholder = DEFAULT_SKYFLOW_PLACEHOLDERS.namePlaceholder,
@@ -32,6 +33,7 @@ export const CardHolderInput: React.FC<InputProps> = ({
   const [errorText, setErrorText] = useState('');
   return (
     <>
+      <SkyflowContainerWrapper />
       {state?.skyflowContainer && state?.isCreated && !state?.isCreating && (
         <View
           style={{

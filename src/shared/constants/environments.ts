@@ -5,4 +5,13 @@ const TONDER_URL_BY_MODE = Object.freeze({
   development: 'http://192.168.68.102:8000',
 });
 
-export { TONDER_URL_BY_MODE };
+const getPayFlowLoadingUrlByMode = (mode: string) => {
+  if (mode === 'production') {
+    return 'https://payflow.tonder.io/loading';
+  } else if (mode === 'stage') {
+    return 'https://stage-payflow.tonder.io/loading';
+  }
+  return 'https://dev-payflow.tonder.io/loading';
+};
+
+export { TONDER_URL_BY_MODE, getPayFlowLoadingUrlByMode };

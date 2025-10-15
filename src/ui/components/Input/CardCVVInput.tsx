@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { CvvElement } from 'skf-rnad';
+import { CvvElement } from 'skyflow-react-native';
 import React, { useState } from 'react';
 import type { InputProps } from '../../../types';
 import {
@@ -17,20 +17,23 @@ import {
   SKYFLOW_HIDDEN_ERROR_TEXT_STYLES,
 } from '../../styles/skyflow';
 import useTonderContext from '../../providers/TonderProvider/hook';
+import SkyflowContainerWrapper from '../../providers/SkyflowContainerWrapper';
 
-export const CardCVVInput: React.FC<InputProps> = ({
+export const CardCVVInput: React.FC<InputProps & { cardId?: string }> = ({
   placeholder = DEFAULT_SKYFLOW_PLACEHOLDERS.cvvPlaceholder,
   label = DEFAULT_SKYFLOW_lABELS.cvvLabel,
   style,
   onFocus,
   onBlur,
   onChange,
+  cardId,
 }) => {
   const [errorText, setErrorText] = useState('');
   const { state } = useTonderContext();
 
   return (
     <>
+      <SkyflowContainerWrapper key={`cvvElement-${cardId}`} />
       {state?.skyflowContainer && state?.isCreated && !state?.isCreating && (
         <View
           style={{
@@ -46,6 +49,7 @@ export const CardCVVInput: React.FC<InputProps> = ({
             column="cvv"
             placeholder={placeholder}
             label={label}
+            skyflowID={cardId}
             validations={[regexMatchRule]}
             inputStyles={{
               ...DEFAULT_SKYFLOW_INPUT_STYLES,

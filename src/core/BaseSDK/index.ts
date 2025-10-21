@@ -6,22 +6,18 @@ import type {
 } from '../../types';
 import TonderError from '../../shared/utils/errors';
 import { ErrorKeyEnum } from '../../shared';
-import React from 'react';
 
 class BaseSDK {
   tonderClient: Tonder;
   getState: () => Readonly<any>;
   setState: (newState: Partial<any>) => void;
-  private readonly setSkyflowConfig: React.Dispatch<React.SetStateAction<any>>;
 
   constructor(
     tonderClient: Tonder,
     getState: () => Readonly<any>,
-    setState: (newState: Partial<any>) => void,
-    setSkyflowConfig: React.Dispatch<React.SetStateAction<any>>
+    setState: (newState: Partial<any>) => void
   ) {
     this.tonderClient = tonderClient;
-    this.setSkyflowConfig = setSkyflowConfig;
     this.getState = getState;
     this.setState = setState;
   }
@@ -101,8 +97,6 @@ class BaseSDK {
           merchantData,
           this.tonderClient.getConfig().mode
         );
-
-      this.setSkyflowConfig(skyflowConfig);
 
       await this.setState({ skyflowConfig });
     }

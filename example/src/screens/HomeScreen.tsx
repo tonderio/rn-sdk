@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { colors } from '../color';
@@ -64,6 +63,14 @@ export default function HomeScreen() {
               }}
             />
           </View>
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Lite payment with saved cards"
+              onPress={() => {
+                navigation.navigate('LitePaymentSavedCardsScreen');
+              }}
+            />
+          </View>
         </>
       </Collapse>
       <Collapse title="Full Enrollment">
@@ -104,7 +111,14 @@ export default function HomeScreen() {
               }}
             />
           </View>
-         
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Lite Enrollment - Update CVV"
+              onPress={() => {
+                navigation.navigate('LiteEnrollmentUpdateCVVScreen');
+              }}
+            />
+          </View>
         </>
       </Collapse>
     </ScrollView>

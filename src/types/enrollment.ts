@@ -1,7 +1,16 @@
-import type { IBaseCreateOptions, IBaseResponse, IEvents, SDKOptions } from './base';
+import type {
+  IBaseCreateOptions,
+  IBaseResponse,
+  IEvents,
+  SDKOptions,
+} from './base';
 import type { IBaseEnrollmentState } from './baseEnrollment';
 import { SDKType } from './base';
-import type { ICardsSummaryResponse, ISaveCardResponse } from './card';
+import type {
+  ICardsSummaryResponse,
+  ICustomerCardsResponse,
+  ISaveCardResponse,
+} from './card';
 import type { IFormLabels, IFormPlaceholder, IStyles } from './common';
 import type { ICustomer } from './customer';
 import TonderError from '../shared/utils/errors';
@@ -78,4 +87,12 @@ export interface IEnrollment {
    * @public
    */
   getCardSummary(id: string): Promise<IBaseResponse<ICardsSummaryResponse>>;
+
+  /**
+   * Retrieves the list of cards associated with a customer.
+   * @returns {Promise<IBaseResponse<ICustomerCardsResponse>>} A promise that resolves with the customer's card data.
+   *
+   * @public
+   */
+  getCustomerCards(): Promise<IBaseResponse<ICustomerCardsResponse>>;
 }

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useState } from 'react';
 import type { InputProps } from '../../../types';
-import { ExpirationYearElement } from 'skf-rnad';
+import { ExpirationYearElement } from 'skyflow-react-native';
 import {
   getErrorField,
   regexMatchRule,
@@ -17,6 +17,7 @@ import {
   SKYFLOW_HIDDEN_ERROR_TEXT_STYLES,
 } from '../../styles/skyflow';
 import useTonderContext from '../../providers/TonderProvider/hook';
+import SkyflowContainerWrapper from '../../providers/SkyflowContainerWrapper';
 
 export const CardExpirationYearInput: React.FC<InputProps> = ({
   placeholder = DEFAULT_SKYFLOW_PLACEHOLDERS.expiryYearPlaceholder,
@@ -31,6 +32,7 @@ export const CardExpirationYearInput: React.FC<InputProps> = ({
 
   return (
     <>
+      <SkyflowContainerWrapper />
       {state?.skyflowContainer && state?.isCreated && !state?.isCreating && (
         <View
           style={{

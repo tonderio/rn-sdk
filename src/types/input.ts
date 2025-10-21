@@ -1,7 +1,7 @@
 import type {
   CollectInputStylesVariant,
   CollectLabelStylesVariant,
-} from 'skf-rnad';
+} from 'skyflow-react-native';
 import type { StylesBaseVariant } from './common';
 
 export interface IEventSecureInput {

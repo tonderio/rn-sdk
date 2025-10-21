@@ -1,32 +1,29 @@
 import type {
   IBaseResponse,
   ICardsSummaryResponse,
+  ICustomerCardsResponse,
   IEnrollment,
   ISaveCardResponse,
   SDKOptions,
 } from '../../types';
 import TonderError from '../../shared/utils/errors';
 import { ErrorKeyEnum, MESSAGES_ES } from '../../shared';
-import React from 'react';
 import { executeCallback } from '../../shared/utils/common';
 import BaseEnrollment from '../../core/BaseEnrollment';
 import { SDKType } from '../../types';
 import Tonder from '../../core/Tonder';
+import { getCardType } from '../../shared/catalog/cardBrandCatalog';
 
 export class EnrollmentContainer implements IEnrollment {
   #tonderClient: Tonder;
   #baseSDK: BaseEnrollment;
 
-  constructor(
-    tonderClient: Tonder,
-    setSkyflowConfig: React.Dispatch<React.SetStateAction<any>>
-  ) {
+  constructor(tonderClient: Tonder) {
     this.#tonderClient = tonderClient;
     this.#baseSDK = new BaseEnrollment(
       tonderClient,
       tonderClient.getState,
-      tonderClient.setState,
-      setSkyflowConfig
+      tonderClient.setState
     );
   }
 
@@ -112,6 +109,33 @@ export class EnrollmentContainer implements IEnrollment {
     try {
       const response = await this.#baseSDK.getCardSummary(id);
       return { response };
+    } catch (error) {
+      return { error: error as TonderError };
+    }
+  };
+
+  public getCustomerCards = async (): Promise<
+    IBaseResponse<ICustomerCardsResponse>
+  > => {
+    try {
+      const merchantId = this.#tonderClient.getBusinessPK();
+      const secureToken: string = this.#tonderClient.getSecureToken();
+      const customer_auth_token: string | undefined =
+        this.#tonderClient.getCustomerAuthToken();
+
+      const response = await this.#tonderClient
+        .getService()
+        .card.fetchCustomerCards(customer_auth_token, secureToken, merchantId);
+
+      return {
+        response: {
+          ...response,
+          cards: response.cards.map((ic) => ({
+            ...ic,
+            icon: getCardType(ic.fields.card_scheme),
+          })),
+        },
+      };
     } catch (error) {
       return { error: error as TonderError };
     }

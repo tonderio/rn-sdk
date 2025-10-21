@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import type {
-  ICardFormEvents,
-  ICardFormStyles,
-  IFormLabels,
-  IFormPlaceholder,
+import {
+  type ICardFormEvents,
+  type ICardFormStyles,
+  type IFormLabels,
+  type IFormPlaceholder,
 } from '../../../types';
 import { CardHolderInput } from '../Input/CardHolderInput';
 import { CardNumberInput } from '../Input/CardNumberInput';
@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     paddingVertical: 10,
+    minHeight: 250,
   },
   expirationRow: {
     flexDirection: 'row',

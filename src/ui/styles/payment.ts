@@ -18,6 +18,7 @@ const DEFAULT_PAYMENT_CONTAINER = StyleSheet.create({
     borderColor: '#e3e3e3',
     width: '100%',
     marginBottom: 10,
+    minHeight: 210,
   },
 });
 export { DEFAULT_INPUT_CONTAINER_STYLES, DEFAULT_PAYMENT_CONTAINER };

@@ -315,6 +315,121 @@ export default function LitePaymentScreen() {
 }
 ```
 
+#### Lite Payment with Saved Cards
+
+When using the LITE SDK with saved cards, you can use the `CardCVVInput` component with the `cardId` prop to update the CVV of a specific saved card. This is particularly useful when displaying a list of saved cards, as some cards may have dynamic CVVs that change over time.
+
+```tsx
+import {
+  CardCVVInput,
+  useTonder,
+  SDKType,
+  type ICard
+} from '@tonder.io/rn-sdk';
+
+export default function LitePaymentSavedCardsScreen() {
+  const { create, payment, getCustomerCards } = useTonder<SDKType.LITE>();
+  const [cards, setCards] = useState<ICard[]>([]);
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+
+  const paymentData = {
+    customer: {
+      email: 'test@example.com',
+      firstName: 'John',
+      lastName: 'Doe',
+    },
+    cart: {
+      total: 399,
+      items: [{
+        name: 'Product',
+        amount_total: 399,
+        description: 'Description',
+        price_unit: 399,
+        quantity: 1,
+      }]
+    }
+  };
+
+  useEffect(() => {
+    initializePayment();
+  }, []);
+
+  const initializePayment = async () => {
+    const { error } = await create({
+      secureToken: 'your-secure-token',
+      paymentData,
+      customization: {
+        saveCards: {
+          autoSave: false,
+        },
+      },
+    });
+
+    if (error) {
+      console.error('SDK initialization error:', error);
+    }
+
+    // Fetch saved cards
+    await fetchCards();
+  };
+
+  const fetchCards = async () => {
+    const { response } = await getCustomerCards();
+    if (response?.cards) {
+      setCards(response.cards);
+    }
+  };
+
+  const handlePayment = async () => {
+    if (!selectedCard) return;
+
+    // Send payment data with selected card ID
+    const paymentDataToSend = { ...paymentData, card: selectedCard };
+    const { response, error } = await payment(paymentDataToSend);
+
+    if (error) {
+      console.error('Payment error:', error);
+      return;
+    }
+    console.log('Payment response: ', response);
+
+    // Validate the transaction status
+    console.log('Payment status: ', response?.transaction_status );
+  };
+
+  return (
+    <SafeAreaView>
+      <ScrollView>
+        {cards.map((card) => (
+          <TouchableOpacity
+            key={card.fields.skyflow_id}
+            onPress={() => setSelectedCard(card.fields.skyflow_id)}
+          >
+            <Text>{card.fields.cardholder_name}</Text>
+            <Text>•••• {card.fields.card_number.slice(-4)}</Text>
+
+            {/* CVV input for the selected card */}
+            {selectedCard === card.fields.skyflow_id && (
+              <CardCVVInput
+                placeholder="CVV"
+                cardId={card.fields.skyflow_id}
+              />
+            )}
+          </TouchableOpacity>
+        ))}
+
+        <TouchableOpacity
+          onPress={handlePayment}
+          disabled={!selectedCard}
+        >
+          <Text>Pay with Selected Card</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+```
+
 ### Card Enrollment Integration
 
 For saving cards without processing payments.
@@ -1052,6 +1167,43 @@ All individual components are available for LITE integrations. Each component in
 - CardExpirationDateInput
 - CardExpirationMonthInput
 - CardExpirationYearInput
+
+#### Individual Components Props
+
+All individual components accept the following props:
+
+| Prop        | Type     | Required | Available In          | Description                                                                                                                                                                                                   |
+|-------------|----------|----------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| label       | string   | No       | All components        | Label text to display above the input                                                                                                                                                                         |
+| placeholder | string   | No       | All components        | Placeholder text for the input field                                                                                                                                                                          |
+| style       | object   | No       | All components        | Custom styling for the input component                                                                                                                                                                        |
+| onChange    | function | No       | All components        | Callback function triggered when the input value changes                                                                                                                                                      |
+| onFocus     | function | No       | All components        | Callback function triggered when the input receives focus                                                                                                                                                     |
+| onBlur      | function | No       | All components        | Callback function triggered when the input loses focus                                                                                                                                                        |
+| cardId      | string   | No       | **CardCVVInput only** | The Skyflow ID of a saved card. When provided, the CVV input will update the CVV for that specific saved card. This is useful when working with saved cards that may have dynamic CVVs that change over time. |
+
+**Use Case for `cardId` prop (CardCVVInput only):**
+
+When displaying a list of saved cards in the LITE SDK, you may need to capture the CVV again for security purposes. By passing the `cardId` prop to the `CardCVVInput` component, the CVV input will be associated with that specific card, allowing you to update its CVV. This is particularly important for dynamic cards where the CVV may change periodically.
+
+⚠️ **Important Notes:**
+
+1. **Single Card Selection Only**: The `CardCVVInput` component with `cardId` must only be displayed when a specific card is selected. It should be conditionally rendered based on the user's card selection.
+
+2. **One CVV Input at a Time**: You cannot display multiple `CardCVVInput` components with different `cardId` values simultaneously. Only one CVV update operation should be active at any given time.
+
+3. **Mutually Exclusive with Card Form**: The `CardCVVInput` with `cardId` cannot be shown at the same time as the full card enrollment form (CardNumberInput, CardholderNameInput, CardCVVInput without cardId, CardExpirationMonthInput, CardExpirationYearInput). These are two separate workflows:
+   - **Save New Card**: Use the complete card form without `cardId`
+   - **Update CVV for Saved Card**: Use `CardCVVInput` with `cardId` only
+
+**Example:**
+```tsx
+// Update CVV for a saved card
+<CardCVVInput
+  cardId="saved-card-skyflow-id"
+  placeholder="Enter CVV"
+/>
+```
 
 ## API Reference
 

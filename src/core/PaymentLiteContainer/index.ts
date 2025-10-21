@@ -1,7 +1,6 @@
 import type Tonder from '../../core/Tonder';
 import TonderError from '../../shared/utils/errors';
 import { ErrorKeyEnum } from '../../shared';
-import React from 'react';
 import type {
   IBaseResponse,
   ICardsSummaryResponse,
@@ -29,16 +28,12 @@ class PaymentLiteContainer implements IPaymentLiteContainer {
     },
   };
 
-  constructor(
-    tonderClient: Tonder,
-    setSkyflowConfig: React.Dispatch<React.SetStateAction<any>>
-  ) {
+  constructor(tonderClient: Tonder) {
     this.#tonderClient = tonderClient;
     this.#baseSDK = new BaseCheckout(
       tonderClient,
       tonderClient.getState,
-      tonderClient.setState,
-      setSkyflowConfig
+      tonderClient.setState
     );
   }
 

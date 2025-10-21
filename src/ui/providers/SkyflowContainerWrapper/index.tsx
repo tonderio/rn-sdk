@@ -1,35 +1,30 @@
-import React, { useEffect } from 'react';
-import { useCollectContainer } from 'skf-rnad';
-import InnerProvider from '../InnerProvider';
-import type { ITonderContext } from '../../../types';
-import { SDKType } from '../../../types';
+import { useEffect } from 'react';
+import { useCollectContainer } from 'skyflow-react-native';
+import useTonderContext from '../TonderProvider/hook';
+import { SDKType } from '@tonder.io/rn-sdk';
 
-interface SkyflowContainerWrapperProps {
-  children: React.ReactNode;
-  contextValue: ITonderContext<SDKType>;
-}
-
-const SkyflowContainerWrapper = ({
-  children,
-  contextValue,
-}: SkyflowContainerWrapperProps) => {
+const SkyflowContainerWrapper = () => {
+  const { uiWrapper, sdk, state } = useTonderContext<SDKType.INLINE>();
   const container = useCollectContainer();
+  const savedCardContainer = useCollectContainer();
 
   useEffect(() => {
-    if (contextValue?.state?.isCreated && container) {
-      contextValue.uiWrapper.setSkyFlowContainer(container);
+    if (state?.isCreated && container) {
+      uiWrapper.setSkyFlowContainer(undefined);
+      setTimeout(() => {
+        uiWrapper.setSkyFlowContainer(container);
+      }, 20);
     }
   }, [
-    contextValue?.state?.isCreated,
-    contextValue.sdk,
-    contextValue.uiWrapper,
+    state?.isCreated,
+    sdk,
+    uiWrapper,
+    state?.skyflowConfig,
+    container,
+    savedCardContainer,
   ]);
 
-  return (
-    <InnerProvider container={container} contextValue={contextValue}>
-      {children}
-    </InnerProvider>
-  );
+  return null;
 };
 
 export default SkyflowContainerWrapper;

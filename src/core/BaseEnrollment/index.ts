@@ -8,7 +8,6 @@ import type {
 import { SDKType } from '../../types';
 import BaseSDK from '../../core/BaseSDK';
 import type Tonder from '../../core/Tonder';
-import React from 'react';
 
 class BaseEnrollment extends BaseSDK {
   #defaultCustomization: IEnrollmentCustomizationOptions = {
@@ -21,10 +20,9 @@ class BaseEnrollment extends BaseSDK {
   constructor(
     tonderClient: Tonder,
     getState: () => Readonly<any>,
-    setState: (newState: Partial<any>) => void,
-    setSkyflowConfig: React.Dispatch<React.SetStateAction<any>>
+    setState: (newState: Partial<any>) => void
   ) {
-    super(tonderClient, getState, setState, setSkyflowConfig);
+    super(tonderClient, getState, setState);
   }
 
   public create = async (

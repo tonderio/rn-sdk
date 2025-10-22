@@ -1,8 +1,8 @@
 import TonderError from '../shared/utils/errors';
 import { HttpClient } from '../infrastructure';
 import { ErrorKeyEnum } from '../shared';
-import type { IConfig } from 'skf-rnad';
-import { Env, LogLevel } from 'skf-rnad';
+import type { IConfig } from 'skyflow-react-native';
+import { Env, LogLevel } from 'skyflow-react-native';
 import { Environment } from '@tonder.io/rn-sdk';
 
 export class SkyflowService {

@@ -1,16 +1,38 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { ProcessButton } from '../../components/Button/ProcessButton';
-import { NewCardForm } from '../../components/CardForm';
+import React, { useEffect, useRef } from 'react';
+import { StyleSheet, View, Text, Animated } from 'react-native';
 import CardFormSkeleton from '../../components/Skeleton/CardFormSkeleton';
-import { DEFAULT_PAYMENT_CONTAINER } from '../../styles/payment';
-import { buildBaseStyleText } from '../../../shared/utils/styleUtils';
 import useTonderContext from '../../providers/TonderProvider/hook';
 import { SDKType } from '../../../types';
+import { NewCardForm } from '../../components/CardForm';
+import { DEFAULT_PAYMENT_CONTAINER } from '../../styles/payment';
+import { buildBaseStyleText } from '../../../shared/utils/styleUtils';
+import { ProcessButton } from '../../components/Button/ProcessButton';
 
 export interface ITonderEnrollmentProps {}
 const TonderEnrollment: React.FC<ITonderEnrollmentProps> = () => {
   const { sdk, state } = useTonderContext<SDKType.ENROLLMENT>();
+
+  // Animación para NewCardForm
+  const animationScale = useRef(new Animated.Value(0)).current;
+  const animationOpacity = useRef(new Animated.Value(0)).current;
+
+  const isCardFormVisible = state?.isCreated;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.spring(animationScale, {
+        toValue: isCardFormVisible ? 1 : 0,
+        useNativeDriver: true,
+        friction: 8,
+        tension: 40,
+      }),
+      Animated.timing(animationOpacity, {
+        toValue: isCardFormVisible ? 1 : 0,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [isCardFormVisible, animationScale, animationOpacity]);
 
   const onSave = async () => {
     try {
@@ -39,17 +61,33 @@ const TonderEnrollment: React.FC<ITonderEnrollmentProps> = () => {
           ...(state?.customization?.styles?.sdkCard?.base || {}),
         }}
       >
-        {state?.isCreated && (
-          <NewCardForm
-            showSaveOption={false}
-            saveCard={false}
-            onSaveCardChange={() => {}}
-            style={state?.customization?.styles?.cardForm}
-            labels={state?.customization?.labels}
-            placeholders={state?.customization?.placeholders}
-            events={state?.events}
-          />
-        )}
+        <Animated.View
+          style={[
+            styles.animatedFormContainer,
+            {
+              opacity: animationOpacity,
+              transform: [{ scaleY: animationScale }],
+            },
+          ]}
+        >
+          {state?.isCreated && (
+            <NewCardForm
+              showSaveOption={false}
+              saveCard={false}
+              onSaveCardChange={() => {}}
+              style={{
+                ...(state?.customization?.styles?.cardForm || {}),
+                base: {
+                  ...styles.containerForm,
+                  ...(state?.customization?.styles?.cardForm?.base || {}),
+                },
+              }}
+              labels={state?.customization?.labels}
+              placeholders={state?.customization?.placeholders}
+              events={state?.events}
+            />
+          )}
+        </Animated.View>
         {state?.customization?.showMessages &&
           state?.message &&
           state?.message !== '' &&
@@ -112,24 +150,7 @@ const TonderEnrollment: React.FC<ITonderEnrollmentProps> = () => {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-  },
-  newCardSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e2e8f0',
-  },
-  cardImage: {
-    width: 32,
-    height: 20,
-    marginLeft: 15,
-  },
-  newCardText: {
-    fontSize: 12,
-    color: '#1D1D1D',
-    marginLeft: 15,
+    minHeight: 210,
   },
   messageContainer: {
     paddingHorizontal: 20,
@@ -141,6 +162,13 @@ const styles = StyleSheet.create({
   successText: {
     color: '#3bc635',
     fontSize: 12,
+  },
+  containerForm: {
+    height: 'auto',
+    minHeight: 190,
+  },
+  animatedFormContainer: {
+    overflow: 'hidden',
   },
 });
 

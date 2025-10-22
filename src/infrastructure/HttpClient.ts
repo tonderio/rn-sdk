@@ -37,11 +37,16 @@ export class HttpClient {
         ...options.headers,
       } as HeadersInit);
 
-      const response = await fetch(`${this.baseUrl}${endpoint}`, {
-        ...options,
-        headers: headers,
-        signal: options.signal || this.abortController.signal,
-      } as RequestInit);
+      const response = await fetch(
+        endpoint.startsWith('https://')
+          ? `${endpoint}`
+          : `${this.baseUrl}${endpoint}`,
+        {
+          ...options,
+          headers: headers,
+          signal: options.signal || this.abortController.signal,
+        } as RequestInit
+      );
       if (!response.ok) {
         throw await this.handleRequestError(response);
       }

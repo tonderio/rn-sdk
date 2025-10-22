@@ -26,8 +26,13 @@ import {
 import { getSecureToken } from './utils/utils';
 import { BusinessConfig } from './business';
 
+// Selection types for payment methods
+type SelectionType = 'card' | 'payment-method' | 'new-card' | null;
+
 export default function LitePaymentFullScreen() {
   const apiSecretKey = BusinessConfig.apiSecretKey;
+
+  // Base payment data - this will be copied and modified based on selection
   const paymentData: IProcessPaymentRequest = {
     customer: {
       email: 'test@example.com',
@@ -57,17 +62,32 @@ export default function LitePaymentFullScreen() {
     },
   };
 
+  // State for loading and processing
   const [isProcessing, setIsProcessing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  // State for fetched data
   const [cards, setCards] = useState<ICard[]>([]);
   const [paymentMethods, setPaymentMethods] = useState<IPaymentMethod[]>([]);
+
+  // State for accordion sections (which section is expanded)
+  const [expandedSection, setExpandedSection] = useState<SelectionType>(null);
+
+  // State for selected payment option
+  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
+    string | null
+  >(null);
+
   const { create, payment, getCustomerCards, getPaymentMethods, reset } =
     useTonder<SDKType.LITE>();
 
+  // Initialize SDK on component mount
   useEffect(() => {
     initialize();
   }, []);
 
+  // Main initialization function
   const initialize = async () => {
     try {
       const token = await getSecureTokenFromBackend();
@@ -78,6 +98,7 @@ export default function LitePaymentFullScreen() {
     }
   };
 
+  // Get secure token from backend
   const getSecureTokenFromBackend = async () => {
     try {
       return await getSecureToken(apiSecretKey);
@@ -86,7 +107,8 @@ export default function LitePaymentFullScreen() {
     }
   };
 
-  const createSDK = async (token) => {
+  // Create the SDK instance
+  const createSDK = async (token: string | undefined) => {
     try {
       const { error } = await create({
         secureToken: token,
@@ -101,6 +123,7 @@ export default function LitePaymentFullScreen() {
     }
   };
 
+  // Fetch saved cards and payment methods
   const fetchInitialData = async () => {
     try {
       const fetchedCards = await getCustomerCards();
@@ -119,28 +142,68 @@ export default function LitePaymentFullScreen() {
     }
   };
 
+  // Toggle accordion section
+  const toggleSection = (section: SelectionType) => {
+    if (expandedSection === section) {
+      // Collapse if already expanded
+      setExpandedSection(null);
+      setSelectedCard(null);
+      setSelectedPaymentMethod(null);
+    } else {
+      // Expand new section and reset selections
+      setExpandedSection(section);
+      setSelectedCard(null);
+      setSelectedPaymentMethod(null);
+    }
+  };
+
+  // Select a saved card
+  const selectCard = (cardId: string) => {
+    setSelectedCard(cardId);
+    setSelectedPaymentMethod(null);
+  };
+
+  // Select a payment method
+  const selectPaymentMethod = (methodName: string) => {
+    setSelectedPaymentMethod(methodName);
+    setSelectedCard(null);
+  };
+
+  // Handle payment based on selected option
   const handlePayment = async () => {
     setIsProcessing(true);
     try {
-      const { response, error } = await payment();
-      if (
-        error ||
-        !['Success', 'Authorized'].includes(response?.transaction_status)
-      ) {
+      // Prepare payment data based on selection
+      let paymentDataToSend = { ...paymentData };
+
+      // Case 1: Saved card selected - add card field
+      if (expandedSection === 'card' && selectedCard) {
+        paymentDataToSend = { ...paymentData, card: selectedCard };
+      }
+      // Case 2: Payment method selected - add payment_method field
+      else if (expandedSection === 'payment-method' && selectedPaymentMethod) {
+        paymentDataToSend = {
+          ...paymentData,
+          payment_method: selectedPaymentMethod,
+        };
+      }
+      // Case 3: New card form - just use base paymentData (SDK collects form inputs)
+      // No additional fields needed
+
+      // Process payment
+      const { response, error } = await payment(paymentDataToSend);
+
+      if (error) {
         Alert.alert('Error', 'Failed to process payment. Please try again.');
-        console.error(
-          'Error processing payment: ',
-          error,
-          response?.transaction_status
-        );
+        console.error('Error processing payment: ', error);
         return;
       }
-      Alert.alert(
-        response?.transaction_status || 'Success',
-        'Payment process successfully!'
-      );
-      console.log('Success Payment: ', response);
-      // Reset the state and regenerate the SDK to use it again.
+      console.log('Payment response: ', response);
+
+      // Handle transaction status
+      handleTransactionStatus(response?.transaction_status);
+
+      // Reset and reinitialize for next use
       reset();
       await initialize();
     } finally {
@@ -148,40 +211,190 @@ export default function LitePaymentFullScreen() {
     }
   };
 
-  const renderCards = () =>
-    cards.length > 0 ? (
-      cards.map((card) => (
-        <View key={card.fields.skyflow_id} style={styles.cardContainer}>
-          <Image source={{ uri: card.icon }} style={styles.cardIcon} />
-          <View>
-            <Text style={styles.cardText}>{card.fields.cardholder_name}</Text>
-            <Text style={styles.cardSubText}>
-              **** **** **** {card.fields.card_number.slice(-4)}
-            </Text>
-            <Text style={styles.cardSubText}>
-              Expires: {card.fields.expiration_month}/
-              {card.fields.expiration_year}
-            </Text>
+  // Handle different transaction statuses
+  // Customize these messages based on your business logic
+  const handleTransactionStatus = (status: string | undefined) => {
+    switch (status) {
+      case 'Success':
+      case 'Authorized':
+        Alert.alert(
+          'Payment Successful',
+          'Your payment has been processed successfully!'
+        );
+
+        break;
+
+      case 'Pending':
+        Alert.alert(
+          'Payment Pending',
+          'Your payment is being processed. You will be notified once completed.'
+        );
+        break;
+
+      case 'Declined':
+        Alert.alert(
+          'Payment Declined',
+          'Your payment was declined. Please try again or use a different payment method.'
+        );
+        break;
+
+      default:
+        Alert.alert(status || 'Unknown Status', 'Error processing payment');
+        break;
+    }
+  };
+
+  // Check if payment button should be enabled
+  const isPaymentEnabled = () => {
+    if (expandedSection === 'card') {
+      return selectedCard !== null;
+    } else if (expandedSection === 'payment-method') {
+      return selectedPaymentMethod !== null;
+    } else if (expandedSection === 'new-card') {
+      return true; // Form validation handled by SDK
+    }
+    return false;
+  };
+
+  // Render saved cards accordion
+  const renderCardsSection = () => (
+    <View style={styles.accordionContainer}>
+      <TouchableOpacity
+        style={styles.accordionHeader}
+        onPress={() => toggleSection('card')}
+      >
+        <Text style={styles.accordionTitle}>💳 Pay with Saved Card</Text>
+        <Text style={styles.accordionIcon}>
+          {expandedSection === 'card' ? '▼' : '▶'}
+        </Text>
+      </TouchableOpacity>
+
+      {expandedSection === 'card' && (
+        <View style={styles.accordionContent}>
+          {cards.length > 0 ? (
+            cards.map((card) => (
+              <TouchableOpacity
+                key={card.fields.skyflow_id}
+                style={[
+                  styles.cardItem,
+                  selectedCard === card.fields.skyflow_id &&
+                    styles.selectedItem,
+                ]}
+                onPress={() => selectCard(card.fields.skyflow_id)}
+              >
+                <Image source={{ uri: card.icon }} style={styles.cardIcon} />
+                <View style={styles.cardInfo}>
+                  <Text style={styles.cardText}>
+                    {card.fields.cardholder_name}
+                  </Text>
+                  <Text style={styles.cardSubText}>
+                    **** **** **** {card.fields.card_number.slice(-4)}
+                  </Text>
+                  <Text style={styles.cardSubText}>
+                    Expires: {card.fields.expiration_month}/
+                    {card.fields.expiration_year}
+                  </Text>
+                </View>
+
+                {/* Show CVV input only for selected card */}
+                {selectedCard === card.fields.skyflow_id && (
+                  <View style={styles.cvvContainer}>
+                    <CardCVVInput
+                      placeholder="CVV"
+                      cardId={card.fields.skyflow_id}
+                    />
+                  </View>
+                )}
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text style={styles.emptyText}>No saved cards available</Text>
+          )}
+        </View>
+      )}
+    </View>
+  );
+
+  // Render payment methods accordion
+  const renderPaymentMethodsSection = () => (
+    <View style={styles.accordionContainer}>
+      <TouchableOpacity
+        style={styles.accordionHeader}
+        onPress={() => toggleSection('payment-method')}
+      >
+        <Text style={styles.accordionTitle}>🏦 Pay with Other Methods</Text>
+        <Text style={styles.accordionIcon}>
+          {expandedSection === 'payment-method' ? '▼' : '▶'}
+        </Text>
+      </TouchableOpacity>
+
+      {expandedSection === 'payment-method' && (
+        <View style={styles.accordionContent}>
+          {paymentMethods.length > 0 ? (
+            paymentMethods.map((method, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.methodItem,
+                  selectedPaymentMethod === method.payment_method &&
+                    styles.selectedItem,
+                ]}
+                onPress={() => selectPaymentMethod(method.payment_method)}
+              >
+                <Image
+                  source={{ uri: method.icon }}
+                  style={styles.methodIcon}
+                />
+                <Text style={styles.methodText}>{method.label}</Text>
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text style={styles.emptyText}>No payment methods available</Text>
+          )}
+        </View>
+      )}
+    </View>
+  );
+
+  // Render new card form accordion
+  const renderNewCardSection = () => (
+    <View style={styles.accordionContainer}>
+      <TouchableOpacity
+        style={styles.accordionHeader}
+        onPress={() => toggleSection('new-card')}
+      >
+        <Text style={styles.accordionTitle}>➕ Pay with New Card</Text>
+        <Text style={styles.accordionIcon}>
+          {expandedSection === 'new-card' ? '▼' : '▶'}
+        </Text>
+      </TouchableOpacity>
+
+      {expandedSection === 'new-card' && (
+        <View style={styles.accordionContent}>
+          {/* Secure card inputs - SDK handles data collection */}
+          <View style={styles.inputWrapper}>
+            <CardHolderInput placeholder="Cardholder Name" />
+          </View>
+          <View style={styles.inputWrapper}>
+            <CardNumberInput placeholder="Card Number" />
+          </View>
+          <View style={styles.row}>
+            <View style={styles.inputWrapper}>
+              <CardExpirationMonthInput placeholder="MM" />
+            </View>
+            <View style={styles.inputWrapper}>
+              <CardExpirationYearInput placeholder="YY" />
+            </View>
+            <View style={styles.inputWrapper}>
+              <CardCVVInput placeholder="CVV" />
+            </View>
           </View>
         </View>
-      ))
-    ) : (
-      <Text style={styles.emptyText}>No saved cards available</Text>
-    );
+      )}
+    </View>
+  );
 
-  const renderPaymentMethods = () =>
-    paymentMethods.length > 0 ? (
-      <View style={styles.gridContainer}>
-        {paymentMethods.map((method, index) => (
-          <View key={index} style={styles.methodGridItem}>
-            <Image source={{ uri: method.icon }} style={styles.methodIcon} />
-            <Text style={styles.methodText}>{method.label}</Text>
-          </View>
-        ))}
-      </View>
-    ) : (
-      <Text style={styles.emptyText}>No payment methods available</Text>
-    );
+  // Show loader while initializing
   if (isLoading) {
     return (
       <View style={styles.loaderContainer}>
@@ -194,45 +407,25 @@ export default function LitePaymentFullScreen() {
     <SafeAreaView style={styles.safeArea}>
       <StatusBar backgroundColor="#fff" barStyle="dark-content" />
       <ScrollView style={styles.scrollContent}>
-        <Text>
-          Lite Payment Example: A custom payment interface showcasing saved
-          cards and all available payment methods. Developers can integrate
-          secure Tonder inputs for cardholder details and dynamically display
-          multiple payment options in a grid layout
+        <Text style={styles.description}>
+          Lite Payment Example: Select one payment option at a time - use a
+          saved card, choose an alternative payment method, or enter new card
+          details.
         </Text>
 
-        {/* Display Customer Cards */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Saved Cards</Text>
-          {renderCards()}
-        </View>
+        {/* Saved Cards Accordion */}
+        {renderCardsSection()}
 
-        {/* Display Payment Methods */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Available Payment Methods</Text>
-          {renderPaymentMethods()}
-        </View>
+        {/* Payment Methods Accordion */}
+        {renderPaymentMethodsSection()}
 
-        {/* Secure Inputs */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Card Details</Text>
-          <View style={styles.inputWrapper}>
-            <CardHolderInput placeholder="Cardholder Name" />
-          </View>
-          <View style={styles.inputWrapper}>
-            <CardNumberInput placeholder="Card Number" />
-          </View>
-          <View style={styles.row}>
-            <CardExpirationMonthInput placeholder="MM" />
-            <CardExpirationYearInput placeholder="YY" />
-            <CardCVVInput placeholder="CVV" />
-          </View>
-        </View>
+        {/* New Card Form Accordion */}
+        {renderNewCardSection()}
 
         {/* Payment Button */}
         <TouchableOpacity
-          style={styles.button}
-          disabled={isProcessing}
+          style={[styles.button, !isPaymentEnabled() && styles.buttonDisabled]}
+          disabled={isProcessing || !isPaymentEnabled()}
           onPress={handlePayment}
         >
           {isProcessing ? (
@@ -250,96 +443,137 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 12,
+    padding: 16,
   },
   scrollContent: {
     flexGrow: 1,
   },
-  section: {
+  description: {
+    fontSize: 14,
+    color: '#666',
     marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  cardContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-    padding: 10,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 8,
-  },
-  cardIcon: {
-    width: 40,
-    height: 25,
-    marginRight: 10,
-  },
-  cardText: {
-    fontWeight: 'bold',
-  },
-  cardSubText: {
-    fontSize: 12,
-    color: '#555',
-  },
-  methodContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  inputWrapper: {
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 10,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    lineHeight: 20,
   },
   loaderContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  gridContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginHorizontal: -5,
+  // Accordion styles
+  accordionContainer: {
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    overflow: 'hidden',
   },
-  methodGridItem: {
-    width: '30%',
-    margin: 5,
+  accordionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'center',
+    padding: 16,
+    backgroundColor: '#f9f9f9',
+  },
+  accordionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  accordionIcon: {
+    fontSize: 16,
+    color: '#666',
+  },
+  accordionContent: {
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  // Saved card styles
+  cardItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    marginBottom: 8,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  selectedItem: {
+    borderColor: '#007AFF',
+    backgroundColor: '#E3F2FD',
+  },
+  cardIcon: {
+    width: 40,
+    height: 25,
+    marginRight: 12,
+  },
+  cardInfo: {
+    flex: 1,
+  },
+  cardText: {
+    fontWeight: 'bold',
+    fontSize: 14,
+    marginBottom: 4,
+  },
+  cardSubText: {
+    fontSize: 12,
+    color: '#555',
+  },
+  cvvContainer: {
+    width: 80,
+    marginLeft: 8,
+  },
+  // Payment method styles
+  methodItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    marginBottom: 8,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
   methodIcon: {
-    width: 50,
-    height: 50,
-    marginBottom: 5,
+    width: 40,
+    height: 40,
+    marginRight: 12,
   },
   methodText: {
-    fontSize: 12,
-    textAlign: 'center',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  // New card form styles
+  inputWrapper: {
+    marginBottom: 12,
+    flex: 1,
+  },
+  row: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  // Button styles
+  button: {
+    backgroundColor: '#007AFF',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 40,
+  },
+  buttonDisabled: {
+    backgroundColor: '#ccc',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   emptyText: {
     fontSize: 14,
     fontStyle: 'italic',
     color: '#aaa',
     textAlign: 'center',
+    paddingVertical: 20,
   },
 });

@@ -17,12 +17,14 @@ export interface ITransaction {
   is_disputed?: boolean | null;
   number_of_payment_attempts: number;
   card_brand?: string | null;
+  is_route_finished?: boolean;
   number_of_installments: number;
   payment?: ITransactionPayment;
   checkout: ITransactionCheckout;
   currency: ITransactionCurrency;
   payment_method?: ITransactionPaymentMethod | null;
   issuing_country?: string | null;
+  is_apm?: boolean;
   decline?: {
     error_type?: string;
   };

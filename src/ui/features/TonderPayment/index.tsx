@@ -1,22 +1,54 @@
-import React, { useState } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import useTonderContext from '../../providers/TonderProvider/hook';
+import { SDKType } from '../../../types';
+import CardFormSkeleton from '../../components/Skeleton/CardFormSkeleton';
+import {
+  Animated,
+  Image,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
+import { DEFAULT_PAYMENT_CONTAINER } from '../../styles/payment';
+import { buildBaseStyleText } from '../../../shared/utils/styleUtils';
 import SavedCardsList from '../../components/SavedCardsList';
 import { ProcessButton } from '../../components/Button/ProcessButton';
 import PaymentMethodsList from '../../components/PaymentMethodsList';
 import { NewCardForm } from '../../components/CardForm';
 import { RadioButton } from '../../components/RadioButton';
 import { getCardType } from '../../../shared/catalog/cardBrandCatalog';
-import CardFormSkeleton from '../../components/Skeleton/CardFormSkeleton';
-import { DEFAULT_PAYMENT_CONTAINER } from '../../styles/payment';
-import { buildBaseStyleText } from '../../../shared/utils/styleUtils';
 import { toCurrency } from '../../../shared/utils/numberUtils';
-import useTonderContext from '../../providers/TonderProvider/hook';
-import { SDKType } from '../../../types';
 
 export interface ITonderPaymentProps {}
 const TonderPayment: React.FC<ITonderPaymentProps> = () => {
   const { uiWrapper, sdk, state } = useTonderContext<SDKType.INLINE>();
   const [deletingCards, setDelitingCards] = useState<string[]>([]);
+
+  // Animación para NewCardForm
+  const animationScale = useRef(new Animated.Value(0)).current;
+  const animationOpacity = useRef(new Animated.Value(0)).current;
+
+  const isNewCardSelected =
+    state?.uiData?.selectedMethod === 'new' &&
+    state?.isCreated &&
+    state?.customization?.cardForm?.show;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.spring(animationScale, {
+        toValue: isNewCardSelected ? 1 : 0,
+        useNativeDriver: true,
+        friction: 8,
+        tension: 40,
+      }),
+      Animated.timing(animationOpacity, {
+        toValue: isNewCardSelected ? 1 : 0,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [isNewCardSelected, animationScale, animationOpacity]);
 
   const handleMethodSelect = (methodId: string, type: string) => {
     uiWrapper.updateMethod(type, methodId);
@@ -37,7 +69,6 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
       setDelitingCards((prev) => {
         return prev.filter((it) => it !== cardId);
       });
-      console.error('[TonderPayment | onDeleteCard | ERROR]', error);
     }
   };
 
@@ -52,7 +83,6 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
   if (!state?.isCreating && !state?.isCreated) {
     return null;
   }
-
   return (
     <View style={styles.container}>
       {state?.isCreating && (
@@ -68,7 +98,7 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
           ...(state?.customization?.styles?.sdkCard?.base || {}),
         }}
       >
-        {state?.customization?.saveCards?.showSaved && (
+        {state?.customization?.saveCards?.showSaved && state?.isCreated && (
           <SavedCardsList
             style={state?.customization?.styles?.savedCards}
             expirationLabel={state?.customization?.labels?.expirationCard}
@@ -80,15 +110,25 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
             onDeleteCard={onDeleteCard}
             deletingCards={deletingCards}
             showDeleteButton={state?.customization?.saveCards?.showDeleteOption}
+            cvvProps={{
+              style: state?.customization?.styles?.cardForm,
+              label: state?.customization?.labels?.cvv,
+              placeholder: state?.customization?.placeholders?.cvv,
+              onBlur: state?.events?.cvvEvents?.onBlur,
+              onFocus: state?.events?.cvvEvents?.onFocus,
+              onChange: state?.events?.cvvEvents?.onChange,
+            }}
           />
         )}
 
         {state?.customization?.cardForm?.show && (
-          <View
+          <TouchableOpacity
             style={{
               ...styles.newCardSection,
               ...state?.customization?.styles?.paymentRadio?.base,
             }}
+            onPress={() => handleMethodSelect('new', '')}
+            activeOpacity={0.7}
           >
             <RadioButton
               value="new"
@@ -118,24 +158,34 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
             >
               {state?.customization?.labels?.payWithCard || 'Pagar con tarjeta'}
             </Text>
-          </View>
+          </TouchableOpacity>
         )}
 
-        {state?.uiData?.selectedMethod === 'new' &&
-          state?.isCreated &&
-          state?.customization?.cardForm?.show && (
-            <NewCardForm
-              showSaveOption={
-                state?.customization?.saveCards?.showSaveCardOption
-              }
-              saveCard={state?.uiData?.saveCard || false}
-              onSaveCardChange={handleSaveCardChange}
-              style={state?.customization?.styles?.cardForm}
-              labels={state?.customization?.labels}
-              placeholders={state?.customization?.placeholders}
-              events={state?.events}
-            />
-          )}
+        {state?.customization?.cardForm?.show && (
+          <Animated.View
+            style={[
+              styles.animatedFormContainer,
+              {
+                opacity: animationOpacity,
+                transform: [{ scaleY: animationScale }],
+              },
+            ]}
+          >
+            {state?.uiData?.selectedMethod === 'new' && state?.isCreated && (
+              <NewCardForm
+                showSaveOption={
+                  state?.customization?.saveCards?.showSaveCardOption
+                }
+                saveCard={state?.uiData?.saveCard || false}
+                onSaveCardChange={handleSaveCardChange}
+                style={state?.customization?.styles?.cardForm}
+                labels={state?.customization?.labels}
+                placeholders={state?.customization?.placeholders}
+                events={state?.events}
+              />
+            )}
+          </Animated.View>
+        )}
         {state?.customization?.paymentMethods?.show && (
           <PaymentMethodsList
             methods={state?.uiData.paymentMethods}
@@ -209,6 +259,7 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
+    minHeight: 210,
   },
   newCardSection: {
     flexDirection: 'row',
@@ -241,6 +292,9 @@ const styles = StyleSheet.create({
   successText: {
     color: '#3bc635',
     fontSize: 12,
+  },
+  animatedFormContainer: {
+    overflow: 'hidden',
   },
 });
 

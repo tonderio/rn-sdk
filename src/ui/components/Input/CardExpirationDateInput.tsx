@@ -14,6 +14,8 @@ import { DEFAULT_INPUT_CONTAINER_STYLES } from '../../styles/payment';
 import { CardExpirationMonthInput } from './CardExpirationMonthInput';
 import { CardExpirationYearInput } from './CardExpirationYearInput';
 import type { InputExpiryDateProps } from '../../../types';
+import SkyflowContainerWrapper from '../../providers/SkyflowContainerWrapper';
+import useTonderContext from '../../providers/TonderProvider/hook';
 
 export const CardExpirationDateInput: React.FC<InputExpiryDateProps> = ({
   yearPlaceholder = DEFAULT_SKYFLOW_PLACEHOLDERS.expiryYearPlaceholder,
@@ -22,16 +24,20 @@ export const CardExpirationDateInput: React.FC<InputExpiryDateProps> = ({
   style,
   events,
 }) => {
+  const { state } = useTonderContext();
   return (
     <View style={styles.container}>
-      <Text
-        style={{
-          ...(DEFAULT_SKYFLOW_lABEL_STYLES.base as StyleProp<TextStyle>),
-          ...((style?.labelStyles?.base || {}) as StyleProp<TextStyle>),
-        }}
-      >
-        {label}
-      </Text>
+      <SkyflowContainerWrapper />
+      {state?.skyflowContainer && state?.isCreated && !state?.isCreating && (
+        <Text
+          style={{
+            ...(DEFAULT_SKYFLOW_lABEL_STYLES.base as StyleProp<TextStyle>),
+            ...((style?.labelStyles?.base || {}) as StyleProp<TextStyle>),
+          }}
+        >
+          {label}
+        </Text>
+      )}
       <View style={styles.row}>
         <CardExpirationMonthInput
           label={''}

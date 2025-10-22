@@ -16,6 +16,14 @@ const PAYMENT_METHODS_CATALOG: {
     label: 'CoDi',
     icon: 'https://d35a75syrgujp0.cloudfront.net/payment_methods/codi.png',
   },
+  [PAYMENT_METHODS.MERCADOPAGO]: {
+    label: 'Mercado Pago',
+    icon: 'https://d35a75syrgujp0.cloudfront.net/payment_methods/mercadopago.png',
+  },
+  [PAYMENT_METHODS.OXXOPAY]: {
+    label: 'Oxxo Pay',
+    icon: 'https://d35a75syrgujp0.cloudfront.net/payment_methods/oxxopay.png',
+  },
   [PAYMENT_METHODS.SPEI]: {
     label: 'SPEI',
     icon: 'https://d35a75syrgujp0.cloudfront.net/payment_methods/spei.png',
@@ -235,6 +243,14 @@ const PAYMENT_METHODS_CATALOG: {
   [PAYMENT_METHODS.ACYVALORES]: {
     label: 'Acyvalores',
     icon: 'https://d35a75syrgujp0.cloudfront.net/payment_methods/store.png',
+  },
+  [PAYMENT_METHODS.SAFETYPAYCASH]: {
+    label: 'Paga en Efectivo',
+    icon: 'https://d35a75syrgujp0.cloudfront.net/payment_methods/cash_apm_sp.png',
+  },
+  [PAYMENT_METHODS.SAFETYPAYTRANSFER]: {
+    label: 'Paga por Transferencia',
+    icon: 'https://d35a75syrgujp0.cloudfront.net/payment_methods/transfer_apm_sp.png',
   },
 };
 

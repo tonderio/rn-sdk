@@ -1,4 +1,3 @@
-import React from 'react';
 import BaseSDK from '../BaseSDK';
 import type {
   ICardPaymentFields,
@@ -17,7 +16,11 @@ import Tonder from '../Tonder';
 import { ThreeDSHandler } from '../3DSHandler';
 import { SDKType } from '../../types';
 import TonderError from '../../shared/utils/errors';
-import { ErrorKeyEnum, MESSAGES_ES, TONDER_URL_BY_MODE } from '../../shared';
+import {
+  ErrorKeyEnum,
+  getPayFlowLoadingUrlByMode,
+  MESSAGES_ES,
+} from '../../shared';
 import { executeCallback, getAppInfo } from '../../shared/utils/common';
 import { getPaymentMethodDetails } from '../../shared/catalog/paymentMethodsCatalog';
 import { defaultTo, get } from '../../shared/utils/stringUtils';
@@ -28,10 +31,9 @@ class BaseCheckout extends BaseSDK {
   constructor(
     tonderClient: Tonder,
     getState: () => Readonly<any>,
-    setState: (newState: Partial<any>) => void,
-    setSkyflowConfig: React.Dispatch<React.SetStateAction<any>>
+    setState: (newState: Partial<any>) => void
   ) {
-    super(tonderClient, getState, setState, setSkyflowConfig);
+    super(tonderClient, getState, setState);
     this.#process3ds = new ThreeDSHandler(
       this.tonderClient.getConfig(),
       this.tonderClient.getService(),
@@ -48,7 +50,7 @@ class BaseCheckout extends BaseSDK {
         returnURL:
           data.returnURL && data.returnURL !== ''
             ? data.returnURL
-            : TONDER_URL_BY_MODE[this.tonderClient.getConfig().mode],
+            : getPayFlowLoadingUrlByMode(this.tonderClient.getConfig().mode),
       });
 
       await this.getInitialData();
@@ -139,8 +141,9 @@ class BaseCheckout extends BaseSDK {
       card_tokens = cardFields?.records[0]?.fields;
     }
     if (card_data !== '') {
+      const cardFields = await this.getState().skyflowContainer.collect();
       card_tokens = {
-        skyflow_id: card_data,
+        skyflow_id: cardFields?.records[0]?.fields.skyflow_id,
       };
     }
     return {

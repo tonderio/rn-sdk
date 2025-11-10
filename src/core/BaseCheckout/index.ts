@@ -141,9 +141,25 @@ class BaseCheckout extends BaseSDK {
       card_tokens = cardFields?.records[0]?.fields;
     }
     if (card_data !== '') {
-      const cardFields = await this.getState().skyflowContainer.collect();
+      const collectContainer = this.getState().skyflowContainer;
+      try{
+        if(collectContainer){
+            const cardFields = await this.getState().skyflowContainer.collect();
+            card_data = cardFields?.records[0]?.fields.skyflow_id
+        }
+      } catch (error) {
+        if(collectContainer){
+           const errorDescription = error?.error?.description;
+           throw new TonderError({
+            code: ErrorKeyEnum.THREEDS_REDIRECTION_ERROR,
+            details: {
+                message: errorDescription
+              }
+          });
+        }
+      }
       card_tokens = {
-        skyflow_id: cardFields?.records[0]?.fields.skyflow_id,
+        skyflow_id: card_data,
       };
     }
     return {

@@ -57,6 +57,8 @@ export const MESSAGES_EN = {
     'Ocurrió un error durante la redirección de 3DS.',
   [ErrorKeyEnum.REMOVE_SDK_ERROR]:
     'Ocurrió un error removiendo la instancia del SDK.',
+  [ErrorKeyEnum.MOUNT_COLLECT_ERROR]:
+        'Mount failed. Make sure all inputs are complete and valid.', 
 };
 
 export const MESSAGES_ES = {
@@ -116,4 +118,6 @@ export const MESSAGES_ES = {
     'An error occurred during the 3DS redirection.',
   [ErrorKeyEnum.REMOVE_SDK_ERROR]:
     'An error occurred while removing the SDK instance.',
+  [ErrorKeyEnum.MOUNT_COLLECT_ERROR]:
+        'Falló el montaje. Asegúrate de que todos los campos estén completos y sean válidos.',
 };

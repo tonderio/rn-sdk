@@ -200,7 +200,6 @@
   },
   "dependencies": {
     "lucide-react-native": "0.461.0",
-    "openpay-react-native": "2.0.10",
     "skyflow-react-native": "github:adelmiio/tsk-m1#v1.9.0-tonder.1"
   }
 }

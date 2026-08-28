@@ -1682,7 +1682,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.10.5, @babel/runtime@npm:^7.25.0":
+"@babel/runtime@npm:^7.25.0":
   version: 7.28.4
   resolution: "@babel/runtime@npm:7.28.4"
   checksum: 934b0a0460f7d06637d93fcd1a44ac49adc33518d17253b5a0b55ff4cb90a45d8fe78bf034b448911dbec7aff2a90b918697559f78d21c99ff8dbadae9565b55
@@ -3680,7 +3680,6 @@ __metadata:
     eslint-plugin-prettier: ^5.0.1
     jest: ^29.7.0
     lucide-react-native: 0.461.0
-    openpay-react-native: 2.0.10
     prettier: ^3.0.3
     react: 18.2.0
     react-native: 0.74.0
@@ -3927,13 +3926,6 @@ __metadata:
   dependencies:
     "@types/yargs-parser": "*"
   checksum: ee013f257472ab643cb0584cf3e1ff9b0c44bca1c9ba662395300a7f1a6c55fa9d41bd40ddff42d99f5d95febb3907c9ff600fbcb92dadbec22c6a76de7e1236
-  languageName: node
-  linkType: hard
-
-"@types/yup@npm:^0.29.7":
-  version: 0.29.14
-  resolution: "@types/yup@npm:0.29.14"
-  checksum: 291b6c2f06761bfb2be4c551e2c675a0b48512192850ca547837389de8422707b2a2cf50f50e64ea3caf5ddf41cfa36f0ce4bdb820f86ba1f074eabd0e272c2b
   languageName: node
   linkType: hard
 
@@ -4805,16 +4797,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer@npm:6.0.3":
-  version: 6.0.3
-  resolution: "buffer@npm:6.0.3"
-  dependencies:
-    base64-js: ^1.3.1
-    ieee754: ^1.2.1
-  checksum: 5ad23293d9a731e4318e420025800b42bf0d264004c0286c8cc010af7a270c7a0f6522e84f54b9ad65cbd6db20b8badbfd8d2ebf4f80fa03dab093b89e68c3f9
-  languageName: node
-  linkType: hard
-
 "buffer@npm:^5.5.0":
   version: 5.7.1
   resolution: "buffer@npm:5.7.1"
@@ -4969,19 +4951,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.30001219, caniuse-lite@npm:^1.0.30001746":
+"caniuse-lite@npm:^1.0.30001746":
   version: 1.0.30001751
   resolution: "caniuse-lite@npm:1.0.30001751"
   checksum: d11e25c44e40c21e7b7492a25c9fd60f4c04e94aa265573f7c487666f5e1b5ca3ed09d09560336f959237063616255cb294d415511bb6cf0486eb2cb6a3a4318
-  languageName: node
-  linkType: hard
-
-"card-validator@npm:^8.1.0":
-  version: 8.1.1
-  resolution: "card-validator@npm:8.1.1"
-  dependencies:
-    credit-card-type: ^9.1.0
-  checksum: 8bb1c8f00821028fa29703f39d2c39791cfa409358282db84a9a479f34c1c8867fb914761a5fe529b25de626692de53935a39a5bd912a45d31a910bf8f3549f1
   languageName: node
   linkType: hard
 
@@ -5676,13 +5649,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"credit-card-type@npm:^9.0.1, credit-card-type@npm:^9.1.0":
-  version: 9.1.0
-  resolution: "credit-card-type@npm:9.1.0"
-  checksum: 2bdadf3a0b93cd740447020fea8d397c633ee2b292fcc498971c540e7ca97473c4decf23604f93a1aedd59bb8d9249da8cf0b8fbfb1a464bd63610ae814c77aa
-  languageName: node
-  linkType: hard
-
 "cross-spawn@npm:^7.0.0, cross-spawn@npm:^7.0.2, cross-spawn@npm:^7.0.3, cross-spawn@npm:^7.0.6":
   version: 7.0.6
   resolution: "cross-spawn@npm:7.0.6"
@@ -5775,13 +5741,6 @@ __metadata:
     es-errors: ^1.3.0
     is-data-view: ^1.0.1
   checksum: 8dd492cd51d19970876626b5b5169fbb67ca31ec1d1d3238ee6a71820ca8b80cafb141c485999db1ee1ef02f2cc3b99424c5eda8d59e852d9ebb79ab290eb5ee
-  languageName: node
-  linkType: hard
-
-"date-and-time@npm:0.9.0":
-  version: 0.9.0
-  resolution: "date-and-time@npm:0.9.0"
-  checksum: 41ce2b1a3224668e4e6ddacc44d8372e71ad06076cbbbf19c86e7a08964b3753b1c5f28b038a41cd9311d01b37cdd8d78dac9c965083ffd364394c62504b4d7e
   languageName: node
   linkType: hard
 
@@ -7101,13 +7060,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fn-name@npm:~3.0.0":
-  version: 3.0.0
-  resolution: "fn-name@npm:3.0.0"
-  checksum: 3cfe9bfadb65af582624fb17f8d491eac3d122ff8ecf9debb5994cb243131697b88903a737563cbc7d8a919716bd5f53ed8cb87bdfe124744a0d8a690531b4c2
-  languageName: node
-  linkType: hard
-
 "for-each@npm:^0.3.3, for-each@npm:^0.3.5":
   version: 0.3.5
   resolution: "for-each@npm:0.3.5"
@@ -7828,7 +7780,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ieee754@npm:^1.1.13, ieee754@npm:^1.2.1":
+"ieee754@npm:^1.1.13":
   version: 1.2.1
   resolution: "ieee754@npm:1.2.1"
   checksum: 5144c0c9815e54ada181d80a0b810221a253562422e7c6c3a60b1901154184f49326ec239d618c416c1c5945a2e197107aee8d986a3dd836b53dffefd99b5e7e
@@ -9412,13 +9364,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash-es@npm:^4.17.11":
-  version: 4.18.1
-  resolution: "lodash-es@npm:4.18.1"
-  checksum: 578993943cfa779e784aeed96766484ec6ab15cd855e52c79631de6371ac49fadd6dd9f4719f8d1223ab2bcb0dfbece484f548191dd34d3dd8b39e1af712a343
-  languageName: node
-  linkType: hard
-
 "lodash.camelcase@npm:^4.3.0":
   version: 4.3.0
   resolution: "lodash.camelcase@npm:4.3.0"
@@ -10928,21 +10873,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openpay-react-native@npm:2.0.10":
-  version: 2.0.10
-  resolution: "openpay-react-native@npm:2.0.10"
-  dependencies:
-    buffer: 6.0.3
-    react-native-credit-card-form-ui: ^1.2.5
-    sprintf-js: 1.1.2
-    uuid: ^3.3.2
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 68d94f315919d4bfd818a94a53463e23ba243496ef28f7cae64f168875f7e3d93978e913b4e43144272c9dd561676d00489e89fa3d03dc88970c5ccb9baed013
-  languageName: node
-  linkType: hard
-
 "optionator@npm:^0.9.3":
   version: 0.9.4
   resolution: "optionator@npm:0.9.4"
@@ -11434,7 +11364,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.5.10, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -11442,13 +11372,6 @@ __metadata:
     object-assign: ^4.1.1
     react-is: ^16.13.1
   checksum: c056d3f1c057cb7ff8344c645450e14f088a915d078dcda795041765047fa080d38e5d626560ccaac94a4e16e3aa15f3557c1a9a8d1174530955e992c675e459
-  languageName: node
-  linkType: hard
-
-"property-expr@npm:^2.0.2":
-  version: 2.0.6
-  resolution: "property-expr@npm:2.0.6"
-  checksum: 89977f4bb230736c1876f460dd7ca9328034502fd92e738deb40516d16564b850c0bbc4e052c3df88b5b8cd58e51c93b46a94bea049a3f23f4a022c038864cab
   languageName: node
   linkType: hard
 
@@ -11639,15 +11562,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-animatable@npm:^1.3.3":
-  version: 1.4.0
-  resolution: "react-native-animatable@npm:1.4.0"
-  dependencies:
-    prop-types: ^15.8.1
-  checksum: a1b211aff745b97351d78643d641fa298f7d71524eaf22fee8a69257ce52e85d6b3caf8e7fd26a521af34984fba7402b7c632c35ea69d618769387d1dcb6b32a
-  languageName: node
-  linkType: hard
-
 "react-native-builder-bob@npm:^0.33.1":
   version: 0.33.3
   resolution: "react-native-builder-bob@npm:0.33.3"
@@ -11680,35 +11594,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-credit-card-form-ui@npm:^1.2.5":
-  version: 1.2.5
-  resolution: "react-native-credit-card-form-ui@npm:1.2.5"
-  dependencies:
-    "@types/yup": ^0.29.7
-    caniuse-lite: ^1.0.30001219
-    card-validator: ^8.1.0
-    credit-card-type: ^9.0.1
-    react-native-animatable: ^1.3.3
-    react-native-masked-text: ^1.13.0
-    react-native-slick: ^1.6.0
-    yup: ^0.29.3
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: cdebce5746dbf3f317770ef06a412584eff9c7e6cce1fa6ad5ba7ebe6ec93f41cae7df9a563f97e157a3bc67e76b8b26ade37f15c50ee6957d8c6fee42f2463d
-  languageName: node
-  linkType: hard
-
-"react-native-masked-text@npm:^1.13.0":
-  version: 1.13.0
-  resolution: "react-native-masked-text@npm:1.13.0"
-  dependencies:
-    date-and-time: 0.9.0
-    tinymask: 1.0.2
-  checksum: d1ccd591a5262c322333d56e2c4ac7e2729e8cddc55225f5495e55904506935797c6d165ca8a36185627ff1845e5a29accbab6a63ec9d6712a6a1e9613f391ee
-  languageName: node
-  linkType: hard
-
 "react-native-safe-area-context@npm:^4.2.4":
   version: 4.14.1
   resolution: "react-native-safe-area-context@npm:4.14.1"
@@ -11729,15 +11614,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 84d1e4697ab7afccf42111d13b7c7e68d382b136f4f4d9cd8fd077b0984ada3114e8c7459a69159983a538fe35db1cf4296075e72fc8cb45341e0feb5080d3dc
-  languageName: node
-  linkType: hard
-
-"react-native-slick@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "react-native-slick@npm:1.6.0"
-  dependencies:
-    prop-types: ^15.5.10
-  checksum: 51e097f2a838b9c351adda63620f3dbfbcc219cf3cd9d8949a9dddd70d9188f21aec05b9ef35c645de94cf4c3d7b7bd5211d05e6c0f6b6e22a00a234fbde396e
   languageName: node
   linkType: hard
 
@@ -12964,13 +12840,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sprintf-js@npm:1.1.2":
-  version: 1.1.2
-  resolution: "sprintf-js@npm:1.1.2"
-  checksum: d4bb46464632b335e5faed381bd331157e0af64915a98ede833452663bc672823db49d7531c32d58798e85236581fb7342fd0270531ffc8f914e186187bf1c90
-  languageName: node
-  linkType: hard
-
 "sprintf-js@npm:~1.0.2":
   version: 1.0.3
   resolution: "sprintf-js@npm:1.0.3"
@@ -13311,13 +13180,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"synchronous-promise@npm:^2.0.13":
-  version: 2.0.17
-  resolution: "synchronous-promise@npm:2.0.17"
-  checksum: 7b1342c93741f3f92ebde1edf5d6ce8dde2278de948d84e9bd85e232c16c0d77c90c4940f9975be3effcb20f047cfb0f16fa311c3b4e092c22f3bf2889fb0fb4
-  languageName: node
-  linkType: hard
-
 "synckit@npm:^0.11.7":
   version: 0.11.11
   resolution: "synckit@npm:0.11.11"
@@ -13438,13 +13300,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinymask@npm:1.0.2":
-  version: 1.0.2
-  resolution: "tinymask@npm:1.0.2"
-  checksum: adc4d8c20e005cc2f9f8770996543ef0be5ef21ac7ce79ea00584f3c04bf47bf423fbd1dadc39ef42b9d5dd1cdae2f2eb162bbe07e6e2b2c78d58f78e1c62252
-  languageName: node
-  linkType: hard
-
 "tmp@npm:^0.0.33":
   version: 0.0.33
   resolution: "tmp@npm:0.0.33"
@@ -13474,13 +13329,6 @@ __metadata:
   version: 1.0.1
   resolution: "toidentifier@npm:1.0.1"
   checksum: 952c29e2a85d7123239b5cfdd889a0dde47ab0497f0913d70588f19c53f7e0b5327c95f4651e413c74b785147f9637b17410ac8c846d5d4a20a5a33eb6dc3a45
-  languageName: node
-  linkType: hard
-
-"toposort@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "toposort@npm:2.0.2"
-  checksum: d64c74b570391c9432873f48e231b439ee56bc49f7cb9780b505cfdf5cb832f808d0bae072515d93834dd6bceca5bb34448b5b4b408335e4d4716eaf68195dcb
   languageName: node
   linkType: hard
 
@@ -14004,15 +13852,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^3.3.2":
-  version: 3.4.0
-  resolution: "uuid@npm:3.4.0"
-  bin:
-    uuid: ./bin/uuid
-  checksum: 58de2feed61c59060b40f8203c0e4ed7fd6f99d42534a499f1741218a1dd0c129f4aa1de797bcf822c8ea5da7e4137aa3673431a96dae729047f7aca7b27866f
-  languageName: node
-  linkType: hard
-
 "v8-compile-cache-lib@npm:^3.0.1":
   version: 3.0.1
   resolution: "v8-compile-cache-lib@npm:3.0.1"
@@ -14485,20 +14324,5 @@ __metadata:
   version: 2.1.3
   resolution: "yoctocolors-cjs@npm:2.1.3"
   checksum: 207df586996c3b604fa85903f81cc54676f1f372613a0c7247f0d24b1ca781905685075d06955211c4d5d4f629d7d5628464f8af0a42d286b7a8ff88e9dadcb8
-  languageName: node
-  linkType: hard
-
-"yup@npm:^0.29.3":
-  version: 0.29.3
-  resolution: "yup@npm:0.29.3"
-  dependencies:
-    "@babel/runtime": ^7.10.5
-    fn-name: ~3.0.0
-    lodash: ^4.17.15
-    lodash-es: ^4.17.11
-    property-expr: ^2.0.2
-    synchronous-promise: ^2.0.13
-    toposort: ^2.0.2
-  checksum: ec7297457ed8a8ccbd7751c4f312a6e651fa5eeb62338d59c6c972f2e6f91d0ce9c7c4026c654afd7bf9fb5b3b651759d5ff5e6621562383390b366048edb5be
   languageName: node
   linkType: hard

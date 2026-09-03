@@ -425,7 +425,10 @@ class BaseCheckout extends BaseSDK {
             payment_method: pmItem.payment_method,
             priority: pmItem.priority,
             category: pmItem.category,
-            ...getPaymentMethodDetails(pmItem.payment_method),
+            ...getPaymentMethodDetails(
+              pmItem.payment_method,
+              this.tonderClient.getConfig().mode
+            ),
           };
         })
         .sort((a, b) => a.priority - b.priority);

@@ -12,6 +12,7 @@ import {
 import { getCardType } from '../../../shared/catalog/cardBrandCatalog';
 import { RadioButton } from '../RadioButton';
 import {
+  type Environment,
   type ICard,
   type InputProps,
   type StylesSavedCardsVariant,
@@ -21,6 +22,7 @@ import { buildBaseStyleText } from '../../../shared/utils/styleUtils';
 import { CardCVVInput } from '@tonder.io/rn-sdk';
 
 interface SavedCardsListProps {
+  mode: Environment;
   cards: ICard[];
   selectedMethod: string;
   cvvProps: InputProps;
@@ -33,6 +35,7 @@ interface SavedCardsListProps {
 }
 
 interface CardItemProps {
+  mode: Environment;
   card: ICard;
   selectedMethod: string;
   onMethodSelect: (methodId: string) => void;
@@ -47,6 +50,7 @@ interface CardItemProps {
 }
 
 const CardItem: React.FC<CardItemProps> = ({
+  mode,
   card,
   selectedMethod,
   onMethodSelect,
@@ -103,7 +107,7 @@ const CardItem: React.FC<CardItemProps> = ({
           onSelect={() => onMethodSelect(card.fields.skyflow_id)}
         />
         <Image
-          source={{ uri: getCardType(card.fields.card_scheme) }}
+          source={{ uri: getCardType(card.fields.card_scheme, mode) }}
           style={{ ...styles.cardImage, ...(style?.cardIcon || {}) }}
         />
         <View style={styles.cardInfo}>
@@ -180,6 +184,7 @@ const CardItem: React.FC<CardItemProps> = ({
 };
 
 const SavedCardsList: React.FC<SavedCardsListProps> = ({
+  mode,
   cards,
   selectedMethod,
   onMethodSelect,
@@ -202,6 +207,7 @@ const SavedCardsList: React.FC<SavedCardsListProps> = ({
       {cards.map((card, index) => (
         <CardItem
           key={card.fields.skyflow_id}
+          mode={mode}
           card={card}
           selectedMethod={selectedMethod}
           onMethodSelect={onMethodSelect}

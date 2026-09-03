@@ -127,7 +127,10 @@ class PaymentLiteContainer implements IPaymentLiteContainer {
           ...response,
           cards: response.cards.map((ic) => ({
             ...ic,
-            icon: getCardType(ic.fields.card_scheme),
+            icon: getCardType(
+              ic.fields.card_scheme,
+              this.#tonderClient.getConfig().mode
+            ),
           })),
         },
       };
@@ -166,7 +169,10 @@ class PaymentLiteContainer implements IPaymentLiteContainer {
         .getService()
         .paymentMethod.fetchPaymentMethods();
 
-      const pm_results = getPaymentMethodsWithDetails(response);
+      const pm_results = getPaymentMethodsWithDetails(
+        response,
+        this.#tonderClient.getConfig().mode
+      );
       return { response: pm_results };
     } catch (error) {
       return { error: error as TonderError };

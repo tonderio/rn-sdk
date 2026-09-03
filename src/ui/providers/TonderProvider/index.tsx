@@ -73,8 +73,9 @@ const TonderProvider: React.FC<React.PropsWithChildren<ITonderProvider>> = <
       sdk: sdk as SDKInstance<T>,
       uiWrapper: uiSDKWrapper,
       state,
+      mode: config.mode,
     }),
-    [sdk, state, uiSDKWrapper]
+    [config.mode, sdk, state, uiSDKWrapper]
   );
 
   return (

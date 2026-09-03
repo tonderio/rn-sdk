@@ -132,7 +132,10 @@ export class EnrollmentContainer implements IEnrollment {
           ...response,
           cards: response.cards.map((ic) => ({
             ...ic,
-            icon: getCardType(ic.fields.card_scheme),
+            icon: getCardType(
+              ic.fields.card_scheme,
+              this.#tonderClient.getConfig().mode
+            ),
           })),
         },
       };

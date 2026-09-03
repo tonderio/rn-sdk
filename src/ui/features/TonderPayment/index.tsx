@@ -22,7 +22,7 @@ import { toCurrency } from '../../../shared/utils/numberUtils';
 
 export interface ITonderPaymentProps {}
 const TonderPayment: React.FC<ITonderPaymentProps> = () => {
-  const { uiWrapper, sdk, state } = useTonderContext<SDKType.INLINE>();
+  const { uiWrapper, sdk, state, mode } = useTonderContext<SDKType.INLINE>();
   const [deletingCards, setDelitingCards] = useState<string[]>([]);
 
   // Animación para NewCardForm
@@ -100,6 +100,7 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
       >
         {state?.customization?.saveCards?.showSaved && state?.isCreated && (
           <SavedCardsList
+            mode={mode}
             style={state?.customization?.styles?.savedCards}
             expirationLabel={state?.customization?.labels?.expirationCard}
             cards={state.uiData?.cards}
@@ -142,7 +143,7 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
               }}
             />
             <Image
-              source={{ uri: getCardType('') }}
+              source={{ uri: getCardType('', mode) }}
               style={{
                 ...styles.cardImage,
                 ...(state?.customization?.styles?.paymentRadio?.cardIcon || {}),
@@ -188,6 +189,7 @@ const TonderPayment: React.FC<ITonderPaymentProps> = () => {
         )}
         {state?.customization?.paymentMethods?.show && (
           <PaymentMethodsList
+            mode={mode}
             methods={state?.uiData.paymentMethods}
             selectedMethod={state?.uiData?.payment_method || ''}
             onMethodSelect={(methodId) => {

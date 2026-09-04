@@ -14,4 +14,15 @@ const getPayFlowLoadingUrlByMode = (mode: string) => {
   return 'https://dev-payflow.tonder.io/loading';
 };
 
-export { TONDER_URL_BY_MODE, getPayFlowLoadingUrlByMode };
+const getStaticAssetsUrlByMode = (mode: string) => {
+  if (mode === 'production') {
+    return 'https://d35a75syrgujp0.cloudfront.net';
+  }
+  return 'https://static.staging.tonder.io';
+};
+
+export {
+  TONDER_URL_BY_MODE,
+  getPayFlowLoadingUrlByMode,
+  getStaticAssetsUrlByMode,
+};

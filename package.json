@@ -1,6 +1,6 @@
 {
   "name": "@tonder.io/rn-sdk",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Tonder react native sdk",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
@@ -89,7 +89,9 @@
     "typescript": "^5.2.2"
   },
   "resolutions": {
-    "@types/react": "^18.2.44"
+    "@types/react": "^18.2.44",
+    "tmp@^0.0.33": "0.2.7",
+    "lodash@4.17.21": "4.18.1"
   },
   "peerDependencies": {
     "react": ">=18.2.0",
@@ -200,7 +202,6 @@
   },
   "dependencies": {
     "lucide-react-native": "0.461.0",
-    "openpay-react-native": "2.0.10",
     "skyflow-react-native": "github:adelmiio/tsk-m1#v1.9.0-tonder.1"
   }
 }

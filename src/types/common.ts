@@ -89,4 +89,5 @@ export interface ITonderContext<T extends SDKType> {
   uiWrapper: IUIWrapper;
   sdk: SDKInstance<T>;
   state: any;
+  mode: Environment;
 }

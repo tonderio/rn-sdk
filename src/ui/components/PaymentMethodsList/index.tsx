@@ -7,12 +7,17 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import type { IPaymentMethod, StylesSelectVariant } from '../../../types';
+import type {
+  Environment,
+  IPaymentMethod,
+  StylesSelectVariant,
+} from '../../../types';
 import { getPaymentMethodDetails } from '../../../shared/catalog/paymentMethodsCatalog';
 import { RadioButton } from '../RadioButton';
 import { buildBaseStyleText } from '../../../shared/utils/styleUtils';
 
 interface PaymentMethodsListProps {
+  mode: Environment;
   methods: IPaymentMethod[];
   selectedMethod: string;
   onMethodSelect: (methodId: string) => void;
@@ -20,6 +25,7 @@ interface PaymentMethodsListProps {
 }
 
 const PaymentMethodsList: React.FC<PaymentMethodsListProps> = ({
+  mode,
   methods,
   selectedMethod,
   onMethodSelect,
@@ -30,7 +36,7 @@ const PaymentMethodsList: React.FC<PaymentMethodsListProps> = ({
   return (
     <ScrollView style={{ ...styles.container, ...(style?.base || {}) }}>
       {methods.map((method) => {
-        const details = getPaymentMethodDetails(method.payment_method);
+        const details = getPaymentMethodDetails(method.payment_method, mode);
         return (
           <TouchableOpacity
             key={method.id}
